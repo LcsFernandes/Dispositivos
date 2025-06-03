@@ -12,7 +12,8 @@ class DispositivoRepository(DispositivoRepositoryInterface):
             query = """ 
                 SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao
                 FROM dw_dispositivos
-                WHERE codigo = ?;"""
+                WHERE codigo = ?;
+                """
             params = (codigo,)
             try:
                 database_connection.execute(query, params)
@@ -41,7 +42,8 @@ class DispositivoRepository(DispositivoRepositoryInterface):
         with DatabaseConnection() as database_connection:
             query = """ 
                 INSERT INTO dw_dispositivos(codigo, tipo, descricao, vaga, status, data_fabricacao)
-                VALUES (?, ?, ?, ?, ?, ?)"""
+                VALUES (?, ?, ?, ?, ?, ?)
+                """
             params = (codigo, tipo, descricao, vaga, status, data_fabricacao,)
             try:
                 database_connection.execute(query, params)
@@ -54,7 +56,8 @@ class DispositivoRepository(DispositivoRepositoryInterface):
             query = """ 
                 UPDATE dw_dispositivos
                 SET codigo = ?, tipo = ?, descricao = ?, vaga = ?, status = ?, data_fabricacao = ?
-                WHERE id = ?"""
+                WHERE id = ?
+                """
             params = (codigo, tipo, descricao, vaga, status, data_fabricacao, id,)
             try:
                 database_connection.execute(query, params)
@@ -66,7 +69,8 @@ class DispositivoRepository(DispositivoRepositoryInterface):
         with DatabaseConnection() as database_connection:
             query = """ 
                 DELETE FROM dw_dispositivos
-                WHERE codigo = ?"""
+                WHERE codigo = ?
+                """
             params = (codigo,)
             try:
                 database_connection.execute(query, params)
@@ -87,8 +91,8 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 
                 if result[0] == 1:
                     return True
-                else
-                    return False
+                
+                return False
                 
             except Exception as exception:
                 raise exception
