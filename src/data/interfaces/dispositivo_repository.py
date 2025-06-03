@@ -3,7 +3,7 @@ from src.domain.entities.dispositivo import Dispositivo
 from datetime import datetime
 from typing import List
 
-class DispositivoRepository(ABC):
+class DispositivoRepositoryInterface(ABC):
 
     @abstractmethod
     def get_dispositivo(self, codigo: str) -> Dispositivo:

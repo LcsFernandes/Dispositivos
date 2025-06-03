@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from src.domain.entities.vaga import Vaga
 from typing import List
 
-class VagaRepository:
+class VagaRepositoryInterface(ABC):
 
     @abstractmethod
-    def get_vaga(self, id: int) -> Vaga:
+    def get_vaga(self, identificacao: str) -> Vaga:
         pass
 
     @abstractmethod
@@ -17,9 +17,9 @@ class VagaRepository:
         pass
 
     @abstractmethod
-    def atualizar_vaga(self, id: int, deposito_id: int, identificacao: str)  -> None:
+    def atualizar_vaga(self, id: int, deposito_id: int, identificacao: str) -> None:
         pass
     
     @abstractmethod
-    def excluir_vaga(self, id: int)  -> None:
+    def excluir_vaga(self, id: int) -> None:
         pass

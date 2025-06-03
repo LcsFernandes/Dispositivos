@@ -4,7 +4,7 @@ from typing import List
 from datetime import datetime
 
 
-class MovimentacaoRepository(ABC):
+class MovimentacaoRepositoryInterface(ABC):
 
     @abstractmethod
     def get_movimentacao(self, id: int) -> Movimentacao:
