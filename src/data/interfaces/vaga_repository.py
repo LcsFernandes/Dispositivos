@@ -19,7 +19,3 @@ class VagaRepositoryInterface(ABC):
     @abstractmethod
     def atualizar_vaga(self, id: int, deposito_id: int, identificacao: str) -> None:
         pass
-    
-    @abstractmethod
-    def excluir_vaga(self, id: int) -> None:
-        pass

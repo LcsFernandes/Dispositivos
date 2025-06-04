@@ -25,7 +25,7 @@ class DatabaseConnection:
             connectionString = f'DRIVER={self.__driver};SERVER={self.__host};DATABASE={self.__database};UID={self.__user};PWD={self.__password}'
             self.connection = pyodbc.connect(connectionString)
             self.cursor = self.connection.cursor()
-            return self.cursor
+            return self
         except Exception as e:
             raise Exception(f"Erro ao conectar no banco de dados: {e}")
         
@@ -36,7 +36,9 @@ class DatabaseConnection:
             else:
                 self.cursor.execute(query, params)
             
-            self.connection.commit()
+            if query.strip().upper().startswith(("INSERT", "UPDATE", "DELETE")):
+                self.connection.commit()
+        
         except Exception as e:
             self.connection.rollback()
             raise Exception(f"Erro ao executar a query: {e}")

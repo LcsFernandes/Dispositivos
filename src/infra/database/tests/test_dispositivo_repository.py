@@ -17,12 +17,12 @@ def setup_dw_dispositivos():
             IF OBJECT_ID('dw_dispositivos', 'U') IS NULL
             CREATE TABLE dw_dispositivos (
                 id INT IDENTITY(1,1) PRIMARY KEY,
-                codigo VARCHAR(50) UNIQUE,
-                tipo INT,
-                descricao VARCHAR(255),
-                vaga VARCHAR(50),
-                status INT,
-                data_fabricacao DATETIME
+                codigo VARCHAR(50) NOT NULL UNIQUE,
+                tipo INT NOT NULL,
+                descricao VARCHAR(255) NOT NULL,
+                vaga VARCHAR(50) NOT NULL,
+                status INT NOT NULL,
+                data_fabricacao DATETIME NOT NULL
             );
         """)
         logger.info("Tabela dw_dispositivos criada.")
@@ -37,19 +37,27 @@ def setup_dw_dispositivos():
 def repo():
     return DispositivoRepository()
 
+
 def test_adicionar_e_get_dispositivo(repo):
     codigo = "TESTE001"
     logger.info(f"Adicionando dispositivo de teste")
-    repo.adicionar_dispositivo(
-        codigo=codigo,
-        tipo=1,
-        descricao="Dispositivo de teste",
-        vaga="A1",
-        status=1,
-        data_fabricacao=datetime(2025, 1, 1)
-    )
-    logger.info("Buscando dispositivo adicionado...")
+    try:
+        repo.adicionar_dispositivo(
+            codigo=codigo,
+            tipo=1,
+            descricao="Dispositivo de teste",
+            vaga="A1",
+            status=1,
+            data_fabricacao=datetime(2025, 1, 1)
+        )
+    except Exception as exception:
+        logger.info("erro de insercao")
+        raise exception
+    
+    logger.info(f"Buscando dispositivo adicionado com o codigo: {codigo}")
     dispositivo = repo.get_dispositivo(codigo)
+   
+    logger.info(f"Dispositivo: {dispositivo}")
     assert dispositivo is not None
     assert dispositivo.codigo == codigo
     assert dispositivo.tipo == 1
@@ -57,16 +65,17 @@ def test_adicionar_e_get_dispositivo(repo):
     assert dispositivo.vaga == "A1"
     assert dispositivo.status == 1
     assert dispositivo.data_fabricacao == datetime(2025, 1, 1)
+    
     logger.info(f"Dispositivo encontrado: {dispositivo}")
 
 def test_get_all_dispositivos(repo):
     logger.info("Adicionando múltiplos dispositivos para o teste de listagem...")
     dispositivos_para_inserir = [
-        ("TESTE001", 1, "Dispositivo 1", "A1", 1, datetime(2025, 1, 1)),
-        ("TESTE002", 2, "Dispositivo 2", "A2", 1, datetime(2025, 2, 1)),
-        ("TESTE003", 1, "Dispositivo 3", "A3", 0, datetime(2025, 3, 1)),
-        ("TESTE004", 2, "Dispositivo 4", "A4", 1, datetime(2025, 4, 1)),
-        ("TESTE005", 1, "Dispositivo 5", "A5", 0, datetime(2025, 5, 1)),
+        ("TESTE002", 1, "Dispositivo 1", "A1", 1, datetime(2025, 1, 1)),
+        ("TESTE003", 2, "Dispositivo 2", "A2", 1, datetime(2025, 2, 1)),
+        ("TESTE004", 1, "Dispositivo 3", "A3", 0, datetime(2025, 3, 1)),
+        ("TESTE005", 2, "Dispositivo 4", "A4", 1, datetime(2025, 4, 1)),
+        ("TESTE006", 1, "Dispositivo 5", "A5", 0, datetime(2025, 5, 1)),
     ]
     for codigo, tipo, descricao, vaga, status, data_fabricacao in dispositivos_para_inserir:
         if repo.get_dispositivo(codigo) is None:

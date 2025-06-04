@@ -41,7 +41,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                INSERT INTO dw_dispositivos(codigo, tipo, descricao, vaga, status, data_fabricacao)
+                INSERT INTO dw_dispositivos (codigo, tipo, descricao, vaga, status, data_fabricacao)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """
             params = (codigo, tipo, descricao, vaga, status, data_fabricacao,)
@@ -89,7 +89,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 database_connection.execute(query, params)
                 result = database_connection.fetchone()
                 
-                if result[0] == 1:
+                if result is not None and result[0] == 1:
                     return True
                 
                 return False

@@ -32,10 +32,10 @@ class VagaRepository(VagaRepositoryInterface):
                 """
             try:
                 database_connection.execute(query)
-                result = database_connection.fetchall()
+                results = database_connection.fetchall()
 
-                if result:
-                    return Vaga(*result)
+                if results:
+                    return [Vaga(*item) for item in results] if results else []
                 return None
             
             except Exception as exception:
@@ -57,22 +57,10 @@ class VagaRepository(VagaRepositoryInterface):
         with DatabaseConnection() as database_connection:
             query = """ 
                 UPDATE dw_vaga 
-                SET deposito_id ?, identificacao = ? 
+                SET deposito_id = ?, identificacao = ? 
                 WHERE id = ?;
                 """
-            params = (deposito_id, identificacao, id)
-            try:
-                database_connection.execute(query, params)
-            except Exception as exception:
-                raise exception
-    
-    def excluir_vaga(self, identificacao: str) -> None:
-        with DatabaseConnection() as database_connection:
-            query = """ 
-                DELETE FROM dw_vaga  
-                WHERE identificacao = ?;
-                """
-            params = (identificacao,)
+            params = (deposito_id, identificacao, id,)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:

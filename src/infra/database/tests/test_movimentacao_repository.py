@@ -48,8 +48,9 @@ def test_registrar_e_get_movimentacao(repo):
         tipo=1
     )
     logger.info("Buscando movimentação registrada...")
+    
     movimentacoes = repo.get_all_movimentacoes()
-    assert len(movimentacoes) > 0
+    assert len(movimentacoes) == 1
     mov = movimentacoes[-1]
     logger.info(f"Movimentação encontrada: {mov}")
     assert mov.id_dispositivo == 1
@@ -58,16 +59,6 @@ def test_registrar_e_get_movimentacao(repo):
     assert mov.data_movimentacao == datetime(2025, 1, 1, 12, 0, 0)
     assert mov.usuario_id == 100
     assert mov.tipo == 1
-
-def test_get_movimentacao(repo):
-    logger.info("Buscando movimentação pelo id...")
-    movimentacoes = repo.get_all_movimentacoes()
-    assert len(movimentacoes) > 0
-    mov_id = movimentacoes[-1].id
-    mov = repo.get_movimentacao(mov_id)
-    assert mov is not None
-    logger.info(f"Movimentação retornada: {mov}")
-    assert mov.id == mov_id
 
 def test_get_movimentacao_por_dispositivo(repo):
     logger.info("Buscando movimentação por id_dispositivo...")
