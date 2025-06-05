@@ -5,11 +5,11 @@ from typing import List
 
 class VagaRepository(VagaRepositoryInterface):
 
-    def get_vaga(self, identificacao: str) -> Vaga:
+    def get_vaga_by_identificacao(self, identificacao: str) -> Vaga:
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT id, deposito_id, identificacao
-                FROM dw_vaga
+                FROM dw_vagas
                 WHERE identificacao = ?;
                 """
             params = (identificacao,)
@@ -23,12 +23,32 @@ class VagaRepository(VagaRepositoryInterface):
             
             except Exception as exception:
                 raise exception
+            
+    def get_vaga_by_id(self, id: int) -> Vaga:
+        with DatabaseConnection() as database_connection:
+            query = """ 
+                SELECT id, deposito_id, identificacao
+                FROM dw_vagas
+                WHERE id = ?;
+                """
+            params = (id,)
+            try:
+                database_connection.execute(query, params)
+                result = database_connection.fetchone()
+
+                if result:
+                    return Vaga(*result)
+                return None
+            
+            except Exception as exception:
+                raise exception
+    
     
     def listar_vagas(self) -> List[Vaga]:
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT id, deposito_id, identificacao
-                FROM dw_vaga
+                FROM dw_vagas
                 """
             try:
                 database_connection.execute(query)
@@ -44,7 +64,7 @@ class VagaRepository(VagaRepositoryInterface):
     def inserir_vaga(self, deposito_id: int, identificacao: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                INSERT INTO dw_vaga (deposito_id, identificacao)
+                INSERT INTO dw_vagas (deposito_id, identificacao)
                 VALUES (?, ?);
                 """
             params = (deposito_id, identificacao)
@@ -56,7 +76,7 @@ class VagaRepository(VagaRepositoryInterface):
     def atualizar_vaga(self, id: int, deposito_id: int, identificacao: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                UPDATE dw_vaga 
+                UPDATE dw_vagas 
                 SET deposito_id = ?, identificacao = ? 
                 WHERE id = ?;
                 """

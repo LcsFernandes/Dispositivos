@@ -15,6 +15,7 @@ class ListarDispositivo(ListarDispositivosInterface):
         if dispositivos:
             response = self.__formatar_resposta(dispositivos)
             return response
+        
         return []
    
     @classmethod

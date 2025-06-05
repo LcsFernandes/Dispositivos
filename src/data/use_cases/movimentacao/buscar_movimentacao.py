@@ -3,15 +3,15 @@ from src.infra.database.repositories.movimentacao_repository import Movimentacao
 from src.domain.entities.movimentacao import Movimentacao
 from typing import Dict
 
-class MovimentacaoRepository(BuscarMovimentacaoInterface)
+class MovimentacaoRepository(BuscarMovimentacaoInterface):
     
     def __init__(self, movimentacao_repository: MovimentacaoRepository):
         self.__movimentacao_repository = movimentacao_repository
 
-    def buscar_movimentacao(self, id: int):
-        self.__valida_id(id)
+    def buscar_movimentacao(self, id_dispositivo: int):
+        self.__valida_id(id_dispositivo)
 
-        movimentacao = self.__movimentacao_repository.buscar_movimentacao(id)
+        movimentacao = self.__movimentacao_repository.buscar_movimentacao(id_dispositivo)
 
         if movimentacao:
             response = self.__formatar_resposta(movimentacao)
@@ -20,11 +20,11 @@ class MovimentacaoRepository(BuscarMovimentacaoInterface)
         return None
 
     @classmethod
-    def __valida_id(cls, id: int) -> None:
-        if not id:
+    def __valida_id(cls, id_dispositivo: int) -> None:
+        if not id_dispositivo:
             raise Exception("id da movimentacao é um campo obrigatorio")
         
-        if not isinstance(id, int) or id < 0:
+        if not isinstance(id_dispositivo, int) or id_dispositivo < 0:
             raise Exception("o id é um campo obrigatorio inteiro positivo")
 
 
@@ -42,5 +42,3 @@ class MovimentacaoRepository(BuscarMovimentacaoInterface)
                     "tipo": movimentacao.tipo
                 }
         }
-         
-        

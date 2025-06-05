@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from src.domain.entities.dispositivo import Dispositivo
-from typing import List
 
-class ListarDispositivos:
 
+class BuscarDispositivosByCodigo(ABC):
+    
     @abstractmethod
-    def listar_dispositivos(self) -> List[Dispositivo]:
+    def buscar_dispositivo_by_codigo(self, codigo: str) -> Dispositivo:
         pass

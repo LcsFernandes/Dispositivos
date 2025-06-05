@@ -60,9 +60,12 @@ class InserirDispositivo(InserirDispositivoInterface):
             raise Exception("Status inválido. Valores aceitos: 1 = 'ativo' ou 0 = 'inativo'")
 
     @classmethod
-    def __valida_data_fabricacao(cls, data_fabricacao) -> None:
+    def __valida_data_fabricacao(cls, data_fabricacao: date) -> None:
         
         if not data_fabricacao:
             raise Exception("A data de fabricação é obrigatória")
         if not isinstance(data_fabricacao, date):
             raise Exception("A data de fabricação deve ser uma data válida")
+        
+        if data_fabricacao > date.today():
+            raise Exception("A data de fabricação Não pode ser maior do que a data atual")

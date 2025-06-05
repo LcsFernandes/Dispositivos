@@ -7,7 +7,7 @@ from typing import List
 
 class DispositivoRepository(DispositivoRepositoryInterface):
     
-    def get_dispositivo(self, codigo: str) -> Dispositivo:
+    def get_dispositivo_by_codigo(self, codigo: str) -> Dispositivo:
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao
@@ -15,6 +15,23 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 WHERE codigo = ?;
                 """
             params = (codigo,)
+            try:
+                database_connection.execute(query, params)
+                result = database_connection.fetchone()
+                if result:
+                    return Dispositivo(*result)
+                return None
+            except Exception as exception:
+                raise exception
+            
+    def get_dispositivo_by_id(self, id: int) -> Dispositivo:
+        with DatabaseConnection() as database_connection:
+            query = """ 
+                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao
+                FROM dw_dispositivos
+                WHERE id = ?;
+                """
+            params = (id,)
             try:
                 database_connection.execute(query, params)
                 result = database_connection.fetchone()

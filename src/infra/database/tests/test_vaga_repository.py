@@ -36,10 +36,20 @@ def test_inserir_e_get_vaga(repo):
     logger.info("Inserindo vaga de teste...")
     repo.inserir_vaga(deposito_id=1, identificacao="VAGA001")
     logger.info("Buscando vaga por identificação...")
-    vaga = repo.get_vaga("VAGA001")
+    vaga = repo.get_vaga_by_identificacao("VAGA001")
     assert vaga is not None
     assert vaga.deposito_id == 1
     assert vaga.identificacao == "VAGA001"
+    logger.info(f"Vaga encontrada: {vaga}")
+
+def test_get_vaga_by_id(repo):
+    logger.info("Inserindo vaga de teste...")
+    repo.inserir_vaga(deposito_id=2, identificacao="VAGA002")
+    logger.info("Buscando vaga por id...")
+    vaga = repo.get_vaga_by_id(2)
+    assert vaga is not None
+    assert vaga.deposito_id == 2
+    assert vaga.identificacao == "VAGA002"
     logger.info(f"Vaga encontrada: {vaga}")
 
 def test_listar_vagas(repo):
@@ -51,11 +61,11 @@ def test_listar_vagas(repo):
 
 def test_atualizar_vaga(repo):
     logger.info("Buscando vaga para atualizar...")
-    vaga = repo.get_vaga("VAGA001")
+    vaga = repo.get_vaga_by_identificacao("VAGA001")
     assert vaga is not None
     logger.info("Atualizando vaga...")
     repo.atualizar_vaga(id=vaga.id, deposito_id=2, identificacao="VAGA001-EDITADA")
-    vaga_atualizada = repo.get_vaga("VAGA001-EDITADA")
+    vaga_atualizada = repo.get_vaga_by_identificacao("VAGA001-EDITADA")
     assert vaga_atualizada.deposito_id == 2
     assert vaga_atualizada.identificacao == "VAGA001-EDITADA"
     logger.info(f"Vaga atualizada: {vaga_atualizada}")

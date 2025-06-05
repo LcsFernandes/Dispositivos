@@ -5,7 +5,11 @@ from typing import List
 class VagaRepositoryInterface(ABC):
 
     @abstractmethod
-    def get_vaga(self, identificacao: str) -> Vaga:
+    def get_vaga_by_identificacao(self, identificacao: str) -> Vaga:
+        pass
+
+    @abstractmethod
+    def get_vaga_by_id(self, id: int) -> Vaga:
         pass
 
     @abstractmethod

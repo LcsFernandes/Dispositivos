@@ -1,24 +1,25 @@
 from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInterface
 from src.domain.entities.dispositivo import Dispositivo
-from src.domain.use_cases.dispositivo.buscar_dispositivo import BuscarDispositivos as BuscarDispositivosInterface
+from src.domain.use_cases.dispositivo.buscar_dispositivo_by_codigo import BuscarDispositivosByCodigo as BuscarDispositivosByCodigoInterface
 from typing import Dict
 
 
-class BuscarDispositivo(BuscarDispositivosInterface):
+class BuscarDispositivoByCodigo(BuscarDispositivosByCodigoInterface):
 
     def __init__(self, dispositivo_repository: DispositivoRepositoryInterface):
         self.__dispositivo_repository = dispositivo_repository
         
-    def buscar_dispositivo(self, codigo: str) -> Dispositivo:
+    def buscar_dispositivo_by_codigo(self, codigo: str) -> Dispositivo:
         self.__valida_codigo_dispositivo(codigo)
         
-        dispositivo = self.__dispositivo_repository.get_dispositivo_por_codigo(codigo)
+        dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(codigo)
         if not dispositivo:
             raise Exception(f"Dispositivo com código {codigo} não encontrado.")
         
         response = self.__formatar_resposta(dispositivo)
         
         return response
+    
     
     @classmethod
     def __valida_codigo_dispositivo(cls, codigo: str) -> None:
@@ -32,7 +33,7 @@ class BuscarDispositivo(BuscarDispositivosInterface):
             "type": "Dispositivos",
             "data": {
                     "id": dispositivo.id,
-                    "nome": dispositivo.codigo,
+                    "codigo": dispositivo.codigo,
                     "tipo": dispositivo.tipo,
                     "descricao": dispositivo.descricao,
                     "vaga": dispositivo.vaga,

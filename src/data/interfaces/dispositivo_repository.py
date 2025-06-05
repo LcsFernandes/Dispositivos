@@ -6,7 +6,11 @@ from typing import List
 class DispositivoRepositoryInterface(ABC):
 
     @abstractmethod
-    def get_dispositivo(self, codigo: str) -> Dispositivo:
+    def get_dispositivo_by_codigo(self, codigo: str) -> Dispositivo:
+        pass
+
+    @abstractmethod
+    def get_dispositivo_by_id(self, id: int) -> Dispositivo:
         pass
 
     @abstractmethod
