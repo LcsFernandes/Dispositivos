@@ -1,11 +1,11 @@
 from src.domain.use_cases.vaga.buscar_vaga_by_id import BuscarVagaById as BuscarVagaByIdInterface
-from src.infra.database.repositories.vaga_repository import VagaRepository
+from src.data.interfaces.vaga_repository import VagaRepositoryInterface
 from src.domain.entities.vaga import Vaga
 from typing import Dict
 
 class BuscarVagaById(BuscarVagaByIdInterface):
 
-    def __init__(self, vaga_repository: VagaRepository):
+    def __init__(self, vaga_repository: VagaRepositoryInterface):
         self.__vaga_repository = vaga_repository
 
     def buscar_vaga_by_id(self, id: int):

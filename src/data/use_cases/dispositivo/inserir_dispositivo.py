@@ -1,4 +1,5 @@
 from src.domain.use_cases.dispositivo.inserir_dispositivo import InserirDispositivo as InserirDispositivoInterface
+from src.data.dto.dispositivo.inserir_dipositivo_dto import InserirDispositivoDTO
 from src.infra.database.repositories.dispositivo_repository import DispositivoRepository
 from datetime import date
 
@@ -7,31 +8,38 @@ class InserirDispositivo(InserirDispositivoInterface):
     def __init__ (self, dispositivo_repository: DispositivoRepository):
         self.__dispositivo_repository = dispositivo_repository
 
-    def inserir_dispositivo(self, codigo, tipo, descricao, vaga, status, data_fabricacao, cliente):
-        self.__valida_codigo
-        self.__valida_tipo
-        self.__valida_descricao
-        self.__valida_vaga
-        self.__valida_status
-        self.__valida_data_fabricacao
+    def inserir_dispositivo(self, dto: InserirDispositivoDTO):
+        if dto.codigo:
+            self.__valida_codigo(dto.codigo)
+        if dto.tipo: 
+            self.__valida_tipo(dto.tipo)
+        if dto.descricao:
+            self.__valida_descricao(dto.descricao)
+        if dto.vaga:
+            self.__valida_vaga(dto.vaga)
+        if dto.status:
+            self.__valida_status(dto.status)
+        if dto.data_fabricacao:
+            self.__valida_data_fabricacao(dto.data_fabricacao)
 
-        self.__dispositivo_repository.adicionar_dispositivo(codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
+        self.__dispositivo_repository.adicionar_dispositivo(dto.codigo, dto.tipo, dto.descricao, dto.vaga, dto.status, dto.data_fabricacao, dto.cliente)
+        
     
-    @classmethod
-    def __valida_codigo(cls, codigo: str) -> None:
+    @staticmethod
+    def __valida_codigo(codigo: str) -> None:
         if not codigo:
             raise Exception("O codigo é obrigatorio para inserir o dispositivo")
     
-    @classmethod
-    def __valida_tipo(cls, tipo: int) -> None:
+    @staticmethod
+    def __valida_tipo(tipo: int) -> None:
         if not tipo:
             raise Exception("O tipo é um parametro obrigatorio")
     
         if not isinstance(tipo, int):
             raise Exception("O tipo deve ser integer")
     
-    @classmethod
-    def __valida_descricao(cls, descricao: str) -> None:
+    @staticmethod
+    def __valida_descricao(descricao: str) -> None:
         if not descricao or not descricao.strip():
             raise Exception("A descrição é obrigatória")
 
@@ -52,15 +60,15 @@ class InserirDispositivo(InserirDispositivoInterface):
             raise Exception(f"A vaga {vaga} já esta cadastrada")
         
 
-    @classmethod
-    def __valida_status(cls, status: str) -> None:
+    @staticmethod
+    def __valida_status(status: str) -> None:
         if not status:
             raise Exception("O status é obrigatório")
         if status not in [1, 0]: 
             raise Exception("Status inválido. Valores aceitos: 1 = 'ativo' ou 0 = 'inativo'")
 
-    @classmethod
-    def __valida_data_fabricacao(cls, data_fabricacao: date) -> None:
+    @staticmethod
+    def __valida_data_fabricacao(data_fabricacao: date) -> None:
         
         if not data_fabricacao:
             raise Exception("A data de fabricação é obrigatória")

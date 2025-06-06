@@ -18,8 +18,8 @@ class ListarDispositivo(ListarDispositivosInterface):
         
         return []
    
-    @classmethod
-    def __formatar_resposta(cls, dispositivos: Dispositivo) -> Dict:
+    @staticmethod
+    def __formatar_resposta(dispositivos: Dispositivo) -> Dict:
         lista_dispositivos = []
         for dispositivo in dispositivos:
             lista_dispositivos.append({
@@ -29,7 +29,8 @@ class ListarDispositivo(ListarDispositivosInterface):
                     "descricao": dispositivo.descricao,
                     "vaga": dispositivo.vaga,
                     "status": dispositivo.status,
-                    "data_fabricacao": dispositivo.data_fabricacao
+                    "data_fabricacao": dispositivo.data_fabricacao,
+                    "cliente": dispositivo.cliente                
                 })
              
         return {

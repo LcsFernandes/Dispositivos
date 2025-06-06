@@ -1,11 +1,11 @@
-from src.infra.database.repositories.movimentacao_repository import MovimentacaoRepository
+from src.data.interfaces.movimentacao_repository import MovimentacaoRepositoryInterface
 from src.domain.use_cases.movimentacao.listar_movimentacao import ListarMovimentacao as ListarMovimentacaoInterface
 from src.domain.entities.movimentacao import Movimentacao
 from typing import List, Dict
 
 class ListarMovimentacao(ListarMovimentacaoInterface):
 
-    def __init__(self, movimentacao_repository: MovimentacaoRepository):
+    def __init__(self, movimentacao_repository: MovimentacaoRepositoryInterface):
         self.__movimentacao_repository = movimentacao_repository
 
     def listar_movimentacao(self) -> List[Movimentacao]:

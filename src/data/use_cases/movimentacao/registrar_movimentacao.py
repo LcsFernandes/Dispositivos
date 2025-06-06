@@ -1,5 +1,5 @@
-from src.infra.database.repositories.movimentacao_repository import MovimentacaoRepository
-from src.infra.database.repositories.dispositivo_repository import DispositivoRepository
+from src.data.interfaces.movimentacao_repository import MovimentacaoRepositoryInterface
+from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInterface
 from src.domain.use_cases.movimentacao.registrar_movimentacao import RegistrarMovimentacao as RegistrarMovimentacaoInterface
 from src.domain.entities.movimentacao import Movimentacao
 from typing import List, Dict
@@ -7,7 +7,7 @@ from datetime import datetime
 
 class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
 
-    def __init__(self, movimentacao_repository: MovimentacaoRepository, dispositivo_repository: DispositivoRepository):
+    def __init__(self, movimentacao_repository: MovimentacaoRepositoryInterface, dispositivo_repository: DispositivoRepositoryInterface):
         self.__movimentacao_repository = movimentacao_repository
         self.__dispositivo_repository = dispositivo_repository
 

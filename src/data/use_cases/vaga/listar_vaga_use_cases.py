@@ -1,11 +1,11 @@
 from src.domain.use_cases.vaga.listar_vagas import ListarVagas as ListarVagasInterface
-from src.infra.database.repositories.vaga_repository import VagaRepository
+from src.data.interfaces.vaga_repository import VagaRepositoryInterface
 from src.domain.entities.vaga import Vaga
 from typing import Dict
 
 class ListarVaga(ListarVagasInterface):
 
-    def __init__(self, vaga_repository: VagaRepository):
+    def __init__(self, vaga_repository: VagaRepositoryInterface):
         self.__vaga_repository = vaga_repository
 
     def listar_vagas(self):
@@ -14,6 +14,7 @@ class ListarVaga(ListarVagasInterface):
         if vagas:
             response = self.__formatar_resposta(vagas)
             return response
+        
         return None
 
 

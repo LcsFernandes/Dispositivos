@@ -27,7 +27,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_dispositivo_by_id(self, id: int) -> Dispositivo:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao
+                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao, cliente
                 FROM dw_dispositivos
                 WHERE id = ?;
                 """
