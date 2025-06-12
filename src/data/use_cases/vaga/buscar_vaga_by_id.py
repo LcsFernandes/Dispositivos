@@ -1,7 +1,7 @@
 from src.domain.use_cases.vaga.buscar_vaga_by_id import BuscarVagaById as BuscarVagaByIdInterface
 from src.data.dto.vaga.buscar_vaga_by_id_dto import BuscarVagaByIdDTO
 from src.data.interfaces.vaga_repository import VagaRepositoryInterface
-from src.errors.types import HttpBadRequestError, HttpNotFoundError
+from src.errors.types import HttpBadRequestError
 from src.domain.entities.vaga import Vaga
 from typing import Dict
 

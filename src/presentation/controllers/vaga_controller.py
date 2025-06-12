@@ -19,7 +19,7 @@ class AlterarVagaController(ControllerInterface):
 
         response = self.__use_case.alterar_vaga(id, identificacao)
 
-        return HttpResponse(status_code=201, body = {response})
+        return HttpResponse(status_code=201, body =response)
     
 class BuscarVagaByIdController(ControllerInterface):
 
@@ -31,7 +31,7 @@ class BuscarVagaByIdController(ControllerInterface):
 
         response = self.__use_case.buscar_vaga_by_id(id)
 
-        return HttpResponse(status_code=200, body= {response})
+        return HttpResponse(status_code=200, body=response)
     
 class BuscarVagaByIdentificacaoController(ControllerInterface):
     def __init__(self, use_case: BuscarVagaByIdentificacaoInterface):
@@ -42,7 +42,7 @@ class BuscarVagaByIdentificacaoController(ControllerInterface):
 
         response = self.__use_case.buscar_vaga_by_identificacao(identificacao)
 
-        return HttpResponse(status_code=200, body= {response})
+        return HttpResponse(status_code=200, body=response)
     
 class ListarVagasController(ControllerInterface):
     def __init__(self, use_case: ListarVagasInterface):
@@ -52,7 +52,7 @@ class ListarVagasController(ControllerInterface):
 
         response = self.__use_case.listar_vagas()
 
-        return HttpResponse(status_code=200, body= {response})
+        return HttpResponse(status_code=200, body=response)
     
 class InserirVagaController(ControllerInterface):
     def __init__(self, use_case: InserirVagaInterface):
@@ -64,5 +64,5 @@ class InserirVagaController(ControllerInterface):
 
         response = self.__use_case.inserir_vaga(deposito_id, identificacao)
 
-        return HttpResponse(status_code=201, body= {response})
+        return HttpResponse(status_code=201, body=response)
 

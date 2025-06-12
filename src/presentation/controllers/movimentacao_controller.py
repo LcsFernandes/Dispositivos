@@ -15,7 +15,7 @@ class BuscarMovimentacaoController(ControllerInterface):
 
         response = self.__use_case.buscar_movimentacao(id_dispositivo)
 
-        return HttpResponse(status_code=200, body={response})
+        return HttpResponse(status_code=200, body=response)
     
 class ListarMovimentacaoController(ControllerInterface):
 
@@ -26,7 +26,7 @@ class ListarMovimentacaoController(ControllerInterface):
         
         response = self.__use_case.listar_movimentacao()
 
-        return HttpResponse(status_code=200, body={response})
+        return HttpResponse(status_code=200, body=response)
     
 class RegistrarMovimentacaoController(ControllerInterface):
 
@@ -44,4 +44,4 @@ class RegistrarMovimentacaoController(ControllerInterface):
 
         response = self.__use_case.registrar_movimentacao(id_dispositivo, local_origem, local_destino, data_movimentacao, usuario_id, tipo)
 
-        return HttpResponse(status_code=201, body={response})
+        return HttpResponse(status_code=201, body=response)
