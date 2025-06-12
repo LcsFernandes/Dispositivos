@@ -1,6 +1,7 @@
 from typing import Optional
+from dataclasses import dataclass
 
+@dataclass(frozen=True)
 class ListarDispositivosDTO:
-    def __init__(self, tipo: Optional[int] = None, status: Optional[int] = None):
-        self.tipo = tipo
-        self.status = status
+    tipo: Optional[int] = None
+    status: Optional[int] = None

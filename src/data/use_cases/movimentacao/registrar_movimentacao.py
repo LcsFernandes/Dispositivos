@@ -1,46 +1,55 @@
 from src.data.interfaces.movimentacao_repository import MovimentacaoRepositoryInterface
 from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInterface
+from src.data.interfaces.vaga_repository import VagaRepositoryInterface
 from src.domain.use_cases.movimentacao.registrar_movimentacao import RegistrarMovimentacao as RegistrarMovimentacaoInterface
-from src.domain.entities.movimentacao import Movimentacao
-from typing import List, Dict
+from src.data.dto.movimentacao.registrar_movimentacao_dto import RegistrarMovimentacaoDTO
 from datetime import datetime
 
 class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
 
-    def __init__(self, movimentacao_repository: MovimentacaoRepositoryInterface, dispositivo_repository: DispositivoRepositoryInterface):
+    def __init__(self, movimentacao_repository: MovimentacaoRepositoryInterface, dispositivo_repository: DispositivoRepositoryInterface, vaga_repository: VagaRepositoryInterface):
         self.__movimentacao_repository = movimentacao_repository
         self.__dispositivo_repository = dispositivo_repository
+        self.__vaga_repository = vaga_repository
 
-    def registrar_movimentacao(self, id_dispositivo: int, local_origem: int, local_destino: int, data_movimentacao: datetime, usuario_id: int, tipo: int):
-        pass
+
+    def registrar_movimentacao(self, dto: RegistrarMovimentacaoDTO):
+        self.__valida_dispositivo(dto.id_dispositivo)
+        self.__valida_local(dto.local_origem)
+        self.__valida_local(dto.local_destino)
+        self.__valida_usuario(dto.usuario_id)
+        self.__valida_tipo(dto.tipo)
+
+        data_movimentacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        self.__movimentacao_repository.registrar_movimentacao(dto.id_dispositivo, dto.local_origem, dto.local_destino, data_movimentacao, dto.usuario_id, dto.tipo)      
+    
     
     def __valida_dispositivo(self, id_dispositivo: int):
         if not id_dispositivo or id_dispositivo < 0:
             raise Exception("id_dispositivo é um campo inteiro positivo obrigatório")
          
-
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(id_dispositivo)
         
-        if dispositivo:
-            raise Exception(f"Dispositivo id {id_dispositivo} já cadastrado")
+        if not dispositivo:
+            raise Exception(f"Dispositivo id {id_dispositivo} nao encontrado")
+    
     
     def __valida_local(self, local: int):
-        if not local:
+        if not local or not isinstance(local, int) or local < 0:
             raise Exception("local é um campo inteiro positivo obrigatório")
+        
+        vaga = self.__vaga_repository.get_vaga_by_id(local)
 
-####################### TERMINAR VAGA PARA PODER VALIDAR OS LOCAIS DE ORIGEME  DESTINO        
-    def __valida_data_movimentacao(self, data_movimentacao: datetime):
-        if not data_movimentacao:
-            raise Exception("data_movimentacao é obrigatória")
-        if not isinstance(data_movimentacao, datetime):
-            raise Exception("data_movimentacao deve ser um datetime válido")
-        if data_movimentacao > datetime.now():
-            raise Exception("data_movimentacao não pode ser no futuro")
-
-    def __valida_usuario(self, usuario_id: int):
+        if not vaga:
+            raise Exception("Vaga nao encontrada")
+    
+    @staticmethod
+    def __valida_usuario(usuario_id: int):
         if not isinstance(usuario_id, int) or usuario_id <= 0:
             raise Exception("usuario_id é um campo inteiro positivo obrigatório")
-
-    def __valida_tipo(self, tipo: int):
+    
+    @staticmethod
+    def __valida_tipo(tipo: int):
         if not isinstance(tipo, int) or tipo <= 0:
             raise Exception("tipo é um campo inteiro positivo obrigatório")

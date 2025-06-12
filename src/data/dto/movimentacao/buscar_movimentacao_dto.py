@@ -1,5 +1,5 @@
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
-class VerificarStatusDispositivoDTO:
-    codigo: str
+class BuscarMovimentacaoDTO:
+    id_dispositivo: int

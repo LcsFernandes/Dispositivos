@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
 class ExcluirDispositivoDTO:
-    def __init__(self, codigo: str):
-        self.codigo = codigo
+    codigo: str

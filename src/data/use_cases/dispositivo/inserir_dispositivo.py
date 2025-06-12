@@ -8,19 +8,13 @@ class InserirDispositivo(InserirDispositivoInterface):
     def __init__ (self, dispositivo_repository: DispositivoRepository):
         self.__dispositivo_repository = dispositivo_repository
 
-    def inserir_dispositivo(self, dto: InserirDispositivoDTO):
-        if dto.codigo:
-            self.__valida_codigo(dto.codigo)
-        if dto.tipo: 
-            self.__valida_tipo(dto.tipo)
-        if dto.descricao:
-            self.__valida_descricao(dto.descricao)
-        if dto.vaga:
-            self.__valida_vaga(dto.vaga)
-        if dto.status:
-            self.__valida_status(dto.status)
-        if dto.data_fabricacao:
-            self.__valida_data_fabricacao(dto.data_fabricacao)
+    def inserir_dispositivo(self, dto: InserirDispositivoDTO):  
+        self.__valida_codigo(dto.codigo)    
+        self.__valida_tipo(dto.tipo)    
+        self.__valida_descricao(dto.descricao)  
+        self.__valida_vaga(dto.vaga)    
+        self.__valida_status(dto.status)    
+        self.__valida_data_fabricacao(dto.data_fabricacao)
 
         self.__dispositivo_repository.adicionar_dispositivo(dto.codigo, dto.tipo, dto.descricao, dto.vaga, dto.status, dto.data_fabricacao, dto.cliente)
         

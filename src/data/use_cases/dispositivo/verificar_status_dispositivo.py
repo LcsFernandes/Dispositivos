@@ -1,7 +1,7 @@
 from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInterface
 from src.data.dto.dispositivo.verificar_status_dispositivos_dto import VerificarStatusDispositivoDTO
 from src.domain.use_cases.dispositivo.verificar_status_dispositivo import VerificarStatusDispositivo as VerificarStatusDispositivoInterface
-
+from typing import Dict
 
 class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
 
@@ -16,15 +16,25 @@ class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
         if not dispositivo:
             raise Exception("Dispositivo nao encontrado")
         
-        response = self.__dispositivo_repository.verificar_status_dispositivo(dto.codigo)
+        status_dispositivo = self.__dispositivo_repository.verificar_status_dispositivo(dto.codigo)
+        response = self.__formatar_resposta(dto.codigo, status_dispositivo)
 
         return response
 
-    
+    @staticmethod
     def __valida_codigo_dispositivo(self, codigo: str):
         if not codigo or not isinstance(codigo, str):
             raise Exception("codigo do dispositivo é um campo tipo string obrigatorio")
     
+    @staticmethod
+    def __formatar_resposta(codigo: str, status: bool) -> Dict:
+        return {
+            "type": "Dispositivo",
+            "data": {
+                    "codigo": codigo,
+                    "status": status
+                }
+        }
         
 
         

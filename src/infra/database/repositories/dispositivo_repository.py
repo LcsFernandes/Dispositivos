@@ -44,7 +44,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_all_dispositivos(self) -> List[Dispositivo]:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao
+                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao, cliente
                 FROM dw_dispositivos;
                 """
             try:
@@ -71,9 +71,9 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def atualizar_dispositivo(self, id: int, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                UPDATE dw_dispositivos
-                SET codigo = ?, tipo = ?, descricao = ?, vaga = ?, status = ?, data_fabricacao = ?
-                WHERE id = ?
+                    UPDATE dw_dispositivos
+                    SET codigo = ?, tipo = ?, descricao = ?, vaga = ?, status = ?, data_fabricacao = ?
+                    WHERE id = ?
                 """
             params = (codigo, tipo, descricao, vaga, status, data_fabricacao, id,)
             try:

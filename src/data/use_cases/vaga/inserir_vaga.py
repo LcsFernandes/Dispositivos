@@ -1,4 +1,5 @@
 from src.domain.use_cases.vaga.inserir_vaga import InserirVaga as InserirVagaInterface
+from src.data.dto.vaga.inserir_vaga_dto import InserirVagaDTO
 from src.data.interfaces.vaga_repository import VagaRepositoryInterface
 
 
@@ -8,16 +9,16 @@ class InserirVaga(InserirVagaInterface):
         self.__vaga_repository = vaga_repository
 
     
-    def inserir_vaga(self, deposito_id: int, identificacao: str) -> None:
-        self.__valida_deposito_id(deposito_id)
-        self.__valida_identificacao(identificacao)
+    def inserir_vaga(self, dto: InserirVagaDTO) -> None:
+        self.__valida_deposito_id(dto.deposito_id)
+        self.__valida_identificacao(dto.identificacao)
 
-        self.__vaga_repository.inserir_vaga(deposito_id, identificacao)
+        self.__vaga_repository.inserir_vaga(dto.deposito_id, dto.identificacao)
 
 
-    @classmethod    
-    def __valida_deposito_id(cls, deposito_id: int):
-        if not deposito_id or not isinstance(id, int) or deposito_id < 0:
+    @staticmethod    
+    def __valida_deposito_id(deposito_id: int):
+        if not deposito_id or not isinstance(deposito_id, int) or deposito_id < 0:
             raise Exception("o deposito_id é um campo obrigatorio inteiro positivo")
         if deposito_id != 74:
             raise Exception("deposito_id informado nao pertence ao armazem de dispositivos")

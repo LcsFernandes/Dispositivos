@@ -7,10 +7,6 @@ from datetime import datetime
 class MovimentacaoRepositoryInterface(ABC):
 
     @abstractmethod
-    def get_movimentacao(self, id: int) -> Movimentacao:
-        pass
-
-    @abstractmethod
     def get_movimentacao_por_dispositivo(self, id_dispositivo: int) -> List[Movimentacao]:
         pass
 

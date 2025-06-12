@@ -1,6 +1,7 @@
 from typing import Optional
+from dataclasses import dataclass
 
+@dataclass(frozen=True)
 class BuscarDispositivoDTO:
-    def __init__(self, id: Optional[int] = None, codigo: Optional[str] = None):
-        self.id = id
-        self.codigo = codigo
+    id: Optional[int] = None
+    codigo: Optional[str] = None

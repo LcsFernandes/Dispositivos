@@ -1,5 +1,6 @@
 from src.domain.use_cases.movimentacao.buscar_movimentacao import BuscarMovimentacao as BuscarMovimentacaoInterface
 from src.data.interfaces.movimentacao_repository import MovimentacaoRepositoryInterface
+from src.data.dto.movimentacao.buscar_movimentacao_dto import BuscarMovimentacaoDTO
 from src.domain.entities.movimentacao import Movimentacao
 from typing import Dict
 
@@ -8,10 +9,10 @@ class MovimentacaoRepository(BuscarMovimentacaoInterface):
     def __init__(self, movimentacao_repository: MovimentacaoRepositoryInterface):
         self.__movimentacao_repository = movimentacao_repository
 
-    def buscar_movimentacao(self, id_dispositivo: int):
-        self.__valida_id(id_dispositivo)
+    def buscar_movimentacao(self, dto: BuscarMovimentacaoDTO):
+        self.__valida_id(dto.id_dispositivo)
 
-        movimentacao = self.__movimentacao_repository.get_movimentacao(id_dispositivo)
+        movimentacao = self.__movimentacao_repository.get_movimentacao_por_dispositivo(dto.id_dispositivo)
 
         if movimentacao:
             response = self.__formatar_resposta(movimentacao)
@@ -19,8 +20,8 @@ class MovimentacaoRepository(BuscarMovimentacaoInterface):
         
         return None
 
-    @classmethod
-    def __valida_id(cls, id_dispositivo: int) -> None:
+    @staticmethod
+    def __valida_id(id_dispositivo: int) -> None:
         if not id_dispositivo:
             raise Exception("id da movimentacao é um campo obrigatorio")
         
@@ -28,8 +29,8 @@ class MovimentacaoRepository(BuscarMovimentacaoInterface):
             raise Exception("o id é um campo obrigatorio inteiro positivo")
 
 
-    @classmethod
-    def __formatar_resposta(cls, movimentacao: Movimentacao) -> Dict:
+    @staticmethod
+    def __formatar_resposta(movimentacao: Movimentacao) -> Dict:
         return {
             "type": "Movimentacao",
             "data": {

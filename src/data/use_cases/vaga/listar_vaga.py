@@ -18,8 +18,8 @@ class ListarVaga(ListarVagasInterface):
         return None
 
 
-    @classmethod
-    def __formatar_resposta(cls, vagas: Vaga) -> Dict:
+    @staticmethod
+    def __formatar_resposta(vagas: Vaga) -> Dict:
         lista_vagas = []
         for vaga in vagas:
             lista_vagas.append({
