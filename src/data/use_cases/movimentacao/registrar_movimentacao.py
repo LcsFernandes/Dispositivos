@@ -3,6 +3,7 @@ from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInte
 from src.data.interfaces.vaga_repository import VagaRepositoryInterface
 from src.domain.use_cases.movimentacao.registrar_movimentacao import RegistrarMovimentacao as RegistrarMovimentacaoInterface
 from src.data.dto.movimentacao.registrar_movimentacao_dto import RegistrarMovimentacaoDTO
+from src.errors.types import HttpBadRequestError
 from datetime import datetime
 
 class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
@@ -27,29 +28,29 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
     
     def __valida_dispositivo(self, id_dispositivo: int):
         if not id_dispositivo or id_dispositivo < 0:
-            raise Exception("id_dispositivo é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("id_dispositivo é um campo inteiro positivo obrigatório")
          
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(id_dispositivo)
         
         if not dispositivo:
-            raise Exception(f"Dispositivo id {id_dispositivo} nao encontrado")
+            raise HttpBadRequestError(f"Dispositivo id {id_dispositivo} nao encontrado")
     
     
     def __valida_local(self, local: int):
         if not local or not isinstance(local, int) or local < 0:
-            raise Exception("local é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("local é um campo inteiro positivo obrigatório")
         
         vaga = self.__vaga_repository.get_vaga_by_id(local)
 
         if not vaga:
-            raise Exception("Vaga nao encontrada")
+            raise HttpBadRequestError("Vaga nao encontrada")
     
     @staticmethod
     def __valida_usuario(usuario_id: int):
         if not isinstance(usuario_id, int) or usuario_id <= 0:
-            raise Exception("usuario_id é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("usuario_id é um campo inteiro positivo obrigatório")
     
     @staticmethod
     def __valida_tipo(tipo: int):
         if not isinstance(tipo, int) or tipo <= 0:
-            raise Exception("tipo é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("tipo é um campo inteiro positivo obrigatório")

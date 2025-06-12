@@ -1,6 +1,7 @@
 from src.domain.use_cases.vaga.buscar_vaga_by_identificacao import BuscarVagaByIdentificacao as BuscarVagaByIdentificacaoInterface
 from src.data.dto.vaga.buscar_vaga_by_identificacao_dto import BuscarVagaByIdentificacaoDTO
 from src.data.interfaces.vaga_repository import VagaRepositoryInterface
+from src.errors.types import HttpBadRequestError
 from src.domain.entities.vaga import Vaga
 from typing import Dict
 
@@ -17,14 +18,16 @@ class BuscarVagaByIdentificacao(BuscarVagaByIdentificacaoInterface):
         if vaga:
             response = self.__formatar_resposta(vaga)
             return response
+        
+        return None
 
     @staticmethod
     def __valida_identificacao(identificacao: str) -> None:
         if not identificacao:
-            raise Exception("identificacao da vaga é um campo obrigatorio")
+            raise HttpBadRequestError("identificacao da vaga é um campo obrigatorio")
         
         if len(identificacao) < 3:
-            raise Exception("Identificacao incorreta")
+            raise HttpBadRequestError("Identificacao incorreta")
         
     @staticmethod
     def __formatar_resposta(vaga: Vaga) -> Dict:

@@ -1,6 +1,7 @@
 from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInterface
 from src.data.dto.dispositivo.verificar_status_dispositivos_dto import VerificarStatusDispositivoDTO
 from src.domain.use_cases.dispositivo.verificar_status_dispositivo import VerificarStatusDispositivo as VerificarStatusDispositivoInterface
+from src.errors.types import HttpBadRequestError, HttpNotFoundError
 from typing import Dict
 
 class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
@@ -14,7 +15,7 @@ class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(dto.codigo)
 
         if not dispositivo:
-            raise Exception("Dispositivo nao encontrado")
+            raise HttpNotFoundError("Dispositivo nao encontrado")
         
         status_dispositivo = self.__dispositivo_repository.verificar_status_dispositivo(dto.codigo)
         response = self.__formatar_resposta(dto.codigo, status_dispositivo)
@@ -22,9 +23,9 @@ class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
         return response
 
     @staticmethod
-    def __valida_codigo_dispositivo(self, codigo: str):
+    def __valida_codigo_dispositivo(codigo: str):
         if not codigo or not isinstance(codigo, str):
-            raise Exception("codigo do dispositivo é um campo tipo string obrigatorio")
+            raise HttpBadRequestError("codigo do dispositivo é um campo tipo string obrigatorio")
     
     @staticmethod
     def __formatar_resposta(codigo: str, status: bool) -> Dict:

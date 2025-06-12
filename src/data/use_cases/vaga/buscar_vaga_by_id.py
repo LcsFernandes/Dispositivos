@@ -1,6 +1,7 @@
 from src.domain.use_cases.vaga.buscar_vaga_by_id import BuscarVagaById as BuscarVagaByIdInterface
 from src.data.dto.vaga.buscar_vaga_by_id_dto import BuscarVagaByIdDTO
 from src.data.interfaces.vaga_repository import VagaRepositoryInterface
+from src.errors.types import HttpBadRequestError, HttpNotFoundError
 from src.domain.entities.vaga import Vaga
 from typing import Dict
 
@@ -17,14 +18,16 @@ class BuscarVagaById(BuscarVagaByIdInterface):
         if vaga:
             response = self.__formatar_resposta(vaga)
             return response
+        
+        return None
 
     @staticmethod
     def __valida_id(id: int) -> None:
         if not id:
-            raise Exception("id da vaga é um campo obrigatorio")
+            raise HttpBadRequestError("id da vaga é um campo obrigatorio")
         
         if not isinstance(id, int) or id < 0:
-            raise Exception("o id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o id é um campo obrigatorio inteiro positivo")
         
     
     @staticmethod

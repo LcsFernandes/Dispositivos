@@ -1,6 +1,7 @@
 from src.domain.use_cases.vaga.alterar_vaga import AlterarVaga as AlterarvagaInterface
 from src.data.dto.vaga.alterar_vaga_dto import AlterarVagaDTO
 from src.data.interfaces.vaga_repository import VagaRepositoryInterface
+from src.errors.types import HttpBadRequestError
 
 
 class AlterarVaga(AlterarvagaInterface):
@@ -18,18 +19,18 @@ class AlterarVaga(AlterarvagaInterface):
     @staticmethod 
     def __valida_id(id: int):
         if not id or not isinstance(id, int) or id < 0:
-            raise Exception("o id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o id é um campo obrigatorio inteiro positivo")
         
     @staticmethod   
     def __valida_deposito_id(deposito_id: int):
         if not deposito_id or not isinstance(deposito_id, int) or deposito_id < 0:
-            raise Exception("o deposito_id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o deposito_id é um campo obrigatorio inteiro positivo")
         if deposito_id != 74:
-            raise Exception("deposito_id informado nao pertence ao armazem de dispositivos")
+            raise HttpBadRequestError("deposito_id informado nao pertence ao armazem de dispositivos")
     
     @staticmethod
     def __valida_identificacao(identificacao: str):
         if not identificacao:
-            raise Exception("identificacao da vaga é um campo obrigatorio")
+            raise HttpBadRequestError("identificacao da vaga é um campo obrigatorio")
         if len(identificacao) < 3:
-            raise Exception("Nome de identificacao para vaga invalido")
+            raise HttpBadRequestError("Nome de identificacao para vaga invalido")

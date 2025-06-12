@@ -2,6 +2,7 @@ from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInte
 from src.data.dto.dispositivo.buscar_dispositivo_dto import BuscarDispositivoDTO
 from src.domain.entities.dispositivo import Dispositivo
 from src.domain.use_cases.dispositivo.buscar_dispositivo_by_codigo import BuscarDispositivosByCodigo as BuscarDispositivosByCodigoInterface
+from src.errors.types import HttpBadRequestError, HttpNotFoundError
 from typing import Dict
 
 
@@ -15,14 +16,14 @@ class BuscarDispositivoByCodigo(BuscarDispositivosByCodigoInterface):
 
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(dto.codigo)
         if not dispositivo:
-            raise Exception(f"Dispositivo com código {dto.codigo} não encontrado.")
+            raise HttpNotFoundError(f"Dispositivo com código {dto.codigo} não encontrado.")
 
         return self.__formatar_resposta(dispositivo)
 
     @staticmethod
     def __valida_codigo_dispositivo(codigo: str) -> None:
         if not isinstance(codigo, str) or not codigo.strip():
-            raise ValueError("Código do dispositivo é obrigatório e deve ser uma string válida.")
+            raise HttpBadRequestError("Código do dispositivo é obrigatório e deve ser uma string válida.")
 
     @staticmethod
     def __formatar_resposta(dispositivo: Dispositivo) -> Dict:

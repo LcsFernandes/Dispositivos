@@ -19,7 +19,7 @@ class AlterarVagaController(ControllerInterface):
 
         response = self.__use_case.alterar_vaga(id, identificacao)
 
-        return HttpResponse(status_code = 201, body = {response})
+        return HttpResponse(status_code=201, body = {response})
     
 class BuscarVagaByIdController(ControllerInterface):
 

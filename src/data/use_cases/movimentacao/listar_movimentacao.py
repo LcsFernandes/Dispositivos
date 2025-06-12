@@ -17,8 +17,8 @@ class ListarMovimentacao(ListarMovimentacaoInterface):
         
         return None
    
-    @classmethod
-    def __formatar_resposta(cls, movimentacoes: Movimentacao) -> Dict:
+    @staticmethod
+    def __formatar_resposta(movimentacoes: Movimentacao) -> Dict:
         lista_movimentacoes = []
         for movimentacao in movimentacoes:
             lista_movimentacoes.append({

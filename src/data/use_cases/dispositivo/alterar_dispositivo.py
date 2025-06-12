@@ -1,6 +1,7 @@
 from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInterface
 from src.data.dto.dispositivo.alterar_dispositivo_dto import AlterarDispositivoDTO
 from src.domain.use_cases.dispositivo.alterar_dispositivo import AlterarDispositivo as AlterarDispositivoInterface 
+from src.errors.types import HttpBadRequestError
 from datetime import datetime
 
 class AlterarDispositivo(AlterarDispositivoInterface):
@@ -14,7 +15,7 @@ class AlterarDispositivo(AlterarDispositivoInterface):
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(dto.id)
         
         if not dispositivo:
-            raise Exception("dispositivo não encontrado")
+            raise HttpBadRequestError("dispositivo não encontrado")
 
         if dto.codigo is not None:
             self.__valida_codigo(dto.codigo)
@@ -55,41 +56,41 @@ class AlterarDispositivo(AlterarDispositivoInterface):
     @staticmethod
     def __valida_id(id: int) -> None:
         if not isinstance(id, int) or id <= 0:
-            raise Exception("O ID deve ser um inteiro positivo")
+            raise HttpBadRequestError("O ID deve ser um inteiro positivo")
 
     @staticmethod
     def __valida_codigo(codigo: str) -> None:
         if not isinstance(codigo, str) or len(codigo.strip()) < 3:
-            raise Exception("Código deve conter pelo menos 3 caracteres")
+            raise HttpBadRequestError("Código deve conter pelo menos 3 caracteres")
 
     @staticmethod
     def __valida_tipo(tipo: int) -> None:
         if not isinstance(tipo, int) or tipo < 0:
-            raise Exception("Tipo deve ser um número inteiro não negativo")
+            raise HttpBadRequestError("Tipo deve ser um número inteiro não negativo")
 
     @staticmethod
     def __valida_descricao(descricao: str) -> None:
         if not isinstance(descricao, str) or len(descricao.strip()) == 0:
-            raise Exception("Descrição não pode estar vazia")
+            raise HttpBadRequestError("Descrição não pode estar vazia")
 
     @staticmethod
     def __valida_vaga(vaga: str) -> None:
         if not isinstance(vaga, str) or len(vaga.strip()) == 0:
-            raise Exception("Vaga não pode estar vazia")
+            raise HttpBadRequestError("Vaga não pode estar vazia")
         if len(vaga.strip()) < 3:
-            raise Exception("Vaga invalida")
+            raise HttpBadRequestError("Vaga invalida")
 
     @staticmethod
     def __valida_status(status: int) -> None:
         if not isinstance(status, int) or status not in (0, 1):
-            raise Exception("Status deve ser 0 (inativo) ou 1 (ativo)")
+            raise HttpBadRequestError("Status deve ser 0 (inativo) ou 1 (ativo)")
 
     @staticmethod
     def __valida_data_fabricacao(data: datetime) -> None:
         if not isinstance(data, datetime):
-            raise Exception("Data de fabricação deve ser um datetime válido")
+            raise HttpBadRequestError("Data de fabricação deve ser um datetime válido")
         if data > datetime.now():
-            raise Exception("Data de fabricação não pode estar no futuro")
+            raise HttpBadRequestError("Data de fabricação não pode estar no futuro")
 
 
             

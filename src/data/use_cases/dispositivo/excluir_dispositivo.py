@@ -2,6 +2,7 @@ from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInte
 from src.data.dto.dispositivo.excluir_dispositivo_dto import ExcluirDispositivoDTO
 from src.domain.entities.dispositivo import Dispositivo
 from src.domain.use_cases.dispositivo.excluir_dispositivo import ExcluirDispositivo as ExcluirDispositivoInterface
+from src.errors.types import HttpBadRequestError
 from typing import Dict, List
 
 class ExcluirDispositivo(ExcluirDispositivoInterface):
@@ -16,12 +17,12 @@ class ExcluirDispositivo(ExcluirDispositivoInterface):
         dispositivo = self.__dispositivo_repository.get_dispositivo(dto.codigo)
         
         if not dispositivo:
-            raise Exception(f"Dispositivo {dto.codigo} nao encontrado")
+            raise HttpBadRequestError(f"Dispositivo {dto.codigo} nao encontrado")
         
         self.__dispositivo_repository.excluir_dispositivo(dto.codigo)
     
     @staticmethod
     def __valida_codigo_dispositivo(codigo: str) -> None:
         if not codigo:
-            raise Exception("codigo do dispositivo é obrigatorio")
+            raise HttpBadRequestError("codigo do dispositivo é obrigatorio")
             

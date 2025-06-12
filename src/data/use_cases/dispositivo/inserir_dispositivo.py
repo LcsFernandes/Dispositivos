@@ -1,6 +1,7 @@
 from src.domain.use_cases.dispositivo.inserir_dispositivo import InserirDispositivo as InserirDispositivoInterface
 from src.data.dto.dispositivo.inserir_dipositivo_dto import InserirDispositivoDTO
 from src.infra.database.repositories.dispositivo_repository import DispositivoRepository
+from src.errors.types import HttpBadRequestError, HttpNotFoundError
 from datetime import date
 
 class InserirDispositivo(InserirDispositivoInterface):
@@ -19,55 +20,60 @@ class InserirDispositivo(InserirDispositivoInterface):
         self.__dispositivo_repository.adicionar_dispositivo(dto.codigo, dto.tipo, dto.descricao, dto.vaga, dto.status, dto.data_fabricacao, dto.cliente)
         
     
-    @staticmethod
-    def __valida_codigo(codigo: str) -> None:
+    
+    def __valida_codigo(self, codigo: str) -> None:
         if not codigo:
-            raise Exception("O codigo é obrigatorio para inserir o dispositivo")
+            raise HttpBadRequestError("O codigo é obrigatorio para inserir o dispositivo")
+        
+        dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(codigo)
+
+        if dispositivo:
+            raise HttpBadRequestError(f"O dispositivo {codigo} ja esta cadastrado")
     
     @staticmethod
     def __valida_tipo(tipo: int) -> None:
         if not tipo:
-            raise Exception("O tipo é um parametro obrigatorio")
+            raise HttpBadRequestError("O tipo é um parametro obrigatorio")
     
         if not isinstance(tipo, int):
-            raise Exception("O tipo deve ser integer")
+            raise HttpBadRequestError("O tipo deve ser integer")
     
     @staticmethod
     def __valida_descricao(descricao: str) -> None:
         if not descricao or not descricao.strip():
-            raise Exception("A descrição é obrigatória")
+            raise HttpBadRequestError("A descrição é obrigatória")
 
     
     def __valida_vaga(self, vaga: str) -> None:
         if vaga is None:
-            raise Exception("A vaga é obrigatória")
+            raise HttpBadRequestError("A vaga é obrigatória")
         
         if not isinstance(vaga, str):
-            raise Exception("A vaga deve ser uma string")
+            raise HttpBadRequestError("A vaga deve ser uma string")
         
         if len(vaga) < 3:
-            raise Exception("Nome inválido para vaga")
+            raise HttpBadRequestError("Nome inválido para vaga")
         
         vaga = self.__dispositivo_repository.get_vaga_by_identificacao(vaga)
 
         if vaga:
-            raise Exception(f"A vaga {vaga} já esta cadastrada")
+            raise HttpBadRequestError(f"A vaga {vaga} já esta cadastrada")
         
 
     @staticmethod
     def __valida_status(status: str) -> None:
         if not status:
-            raise Exception("O status é obrigatório")
+            raise HttpBadRequestError("O status é obrigatório")
         if status not in [1, 0]: 
-            raise Exception("Status inválido. Valores aceitos: 1 = 'ativo' ou 0 = 'inativo'")
+            raise HttpBadRequestError("Status inválido. Valores aceitos: 1 = 'ativo' ou 0 = 'inativo'")
 
     @staticmethod
     def __valida_data_fabricacao(data_fabricacao: date) -> None:
         
         if not data_fabricacao:
-            raise Exception("A data de fabricação é obrigatória")
+            raise HttpBadRequestError("A data de fabricação é obrigatória")
         if not isinstance(data_fabricacao, date):
-            raise Exception("A data de fabricação deve ser uma data válida")
+            raise HttpBadRequestError("A data de fabricação deve ser uma data válida")
         
         if data_fabricacao > date.today():
-            raise Exception("A data de fabricação Não pode ser maior do que a data atual")
+            raise HttpBadRequestError("A data de fabricação Não pode ser maior do que a data atual")

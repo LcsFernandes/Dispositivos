@@ -25,7 +25,7 @@ class AlterarDispositivoController(ControllerInterface):
 
         response = self.__use_case.alterar_dispositivo(id, codigo, tipo, descricao, vaga, status, data_fabricacao)
 
-        return HttpResponse(status_code = 201, body = {response})
+        return HttpResponse(status_code=201, body={response})
 
 class BuscarDispositivosByCodigoController(ControllerInterface):
     
@@ -37,7 +37,7 @@ class BuscarDispositivosByCodigoController(ControllerInterface):
 
         response = self.__use_case.alterar_dispositivo(codigo)
 
-        return HttpResponse(status_code = 200, body = {response})
+        return HttpResponse(status_code=200, body={response})
     
 class BuscarDispositivoByIdController(ControllerInterface):
     
@@ -49,7 +49,7 @@ class BuscarDispositivoByIdController(ControllerInterface):
 
         response = self.__use_case.buscar_dispositivo_by_id(id)
 
-        return  HttpResponse(status_code = 200, body = {response})
+        return  HttpResponse(status_code=200, body={response})
     
 class ExcluirDispositivoController(ControllerInterface):
     
@@ -61,7 +61,7 @@ class ExcluirDispositivoController(ControllerInterface):
 
         response = self.__use_case.excluir_dispositivo(codigo)
 
-        return HttpResponse(status_code = 204, body= {response})
+        return HttpResponse(status_code=204, body={response})
     
 class InserirDispositivoController(ControllerInterface):
     
@@ -79,7 +79,7 @@ class InserirDispositivoController(ControllerInterface):
 
         response = self.__use_case.inserir_dispositivo(codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
 
-        return HttpResponse(status_code = 201, body= {response})
+        return HttpResponse(status_code=201, body={response})
 
 class ListarDispositivoController(ControllerInterface):
 
@@ -90,7 +90,7 @@ class ListarDispositivoController(ControllerInterface):
         
         response = self.__use_case.listar_dispositivos()
  
-        return HttpResponse(status_code = 200, body = {response})
+        return HttpResponse(status_code=200, body={response})
     
 class VerificarStatusDispositivoController(ControllerInterface):
 
@@ -102,4 +102,4 @@ class VerificarStatusDispositivoController(ControllerInterface):
 
         response = self.__use_case(codigo)
 
-        return HttpResponse(status_code = 200, body = {response})
+        return HttpResponse(status_code=200, body={response})

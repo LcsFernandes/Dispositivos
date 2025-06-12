@@ -2,6 +2,7 @@ from src.domain.use_cases.movimentacao.buscar_movimentacao import BuscarMoviment
 from src.data.interfaces.movimentacao_repository import MovimentacaoRepositoryInterface
 from src.data.dto.movimentacao.buscar_movimentacao_dto import BuscarMovimentacaoDTO
 from src.domain.entities.movimentacao import Movimentacao
+from src.errors.types import HttpBadRequestError
 from typing import Dict
 
 class MovimentacaoRepository(BuscarMovimentacaoInterface):
@@ -23,10 +24,10 @@ class MovimentacaoRepository(BuscarMovimentacaoInterface):
     @staticmethod
     def __valida_id(id_dispositivo: int) -> None:
         if not id_dispositivo:
-            raise Exception("id da movimentacao é um campo obrigatorio")
+            raise HttpBadRequestError("id da movimentacao é um campo obrigatorio")
         
         if not isinstance(id_dispositivo, int) or id_dispositivo < 0:
-            raise Exception("o id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o id é um campo obrigatorio inteiro positivo")
 
 
     @staticmethod
