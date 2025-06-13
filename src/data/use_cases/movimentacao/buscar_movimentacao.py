@@ -5,7 +5,7 @@ from src.domain.entities.movimentacao import Movimentacao
 from src.errors.types import HttpBadRequestError
 from typing import Dict
 
-class MovimentacaoRepository(BuscarMovimentacaoInterface):
+class BuscarMovimentacao(BuscarMovimentacaoInterface):
     
     def __init__(self, movimentacao_repository: MovimentacaoRepositoryInterface):
         self.__movimentacao_repository = movimentacao_repository
