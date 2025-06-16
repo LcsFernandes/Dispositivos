@@ -1,5 +1,8 @@
 from flask import Blueprint, request, jsonify
 
+from src.data.dto.movimentacao.buscar_movimentacao_dto import BuscarMovimentacaoDTO
+from src.data.dto.movimentacao.registrar_movimentacao_dto import RegistrarMovimentacaoDTO
+
 from src.main.adapters.request_adapter import request_adapter
 
 from src.main.composers.movimentacao.buscar_movimentacao_composer import buscar_movimentacao_composer
@@ -33,8 +36,8 @@ def registrar_movimentacao():
     
     return jsonify(http_response.body), http_response.status_code
 
-@movimentacao_route_bp.route("/movimentacao/find", methods=["GET"])
-def buscar_movimentacao():
+@movimentacao_route_bp.route("/movimentacao/find/<int:id_dispositivo>", methods=["GET"])
+def buscar_movimentacao(id_dispositivo):
     http_response = None
     
     try:

@@ -15,5 +15,5 @@ class MovimentacaoRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def registrar_movimentacao(self, id_dispositivo: int, local_origem: int, local_destino: int, data_movimentacao: datetime, usuario_id: int, tipo: int) -> None:
+    def registrar_movimentacao(self, id_dispositivo: int, local_origem: int, local_destino: int, data_movimentacao: datetime, login_id: int) -> None:
         pass

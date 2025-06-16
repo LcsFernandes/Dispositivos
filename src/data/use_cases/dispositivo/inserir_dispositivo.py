@@ -1,13 +1,16 @@
 from src.domain.use_cases.dispositivo.inserir_dispositivo import InserirDispositivo as InserirDispositivoInterface
 from src.data.dto.dispositivo.inserir_dipositivo_dto import InserirDispositivoDTO
-from src.infra.database.repositories.dispositivo_repository import DispositivoRepository
-from src.errors.types import HttpBadRequestError, HttpNotFoundError
-from datetime import date
+from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInterface
+from src.data.interfaces.vaga_repository import VagaRepositoryInterface
+from src.errors.types import HttpBadRequestError
+from datetime import datetime, date
+
 
 class InserirDispositivo(InserirDispositivoInterface):
 
-    def __init__ (self, dispositivo_repository: DispositivoRepository):
+    def __init__ (self, dispositivo_repository: DispositivoRepositoryInterface, vaga_repository: VagaRepositoryInterface):
         self.__dispositivo_repository = dispositivo_repository
+        self.__vaga_repository = vaga_repository
 
     def inserir_dispositivo(self, dto: InserirDispositivoDTO):  
         self.__valida_codigo(dto.codigo)    
@@ -54,24 +57,31 @@ class InserirDispositivo(InserirDispositivoInterface):
         if len(vaga) < 3:
             raise HttpBadRequestError("Nome inválido para vaga")
         
-        vaga = self.__dispositivo_repository.get_vaga_by_identificacao(vaga)
+        vaga = self.__vaga_repository.get_vaga_by_identificacao(vaga)
 
-        if vaga:
-            raise HttpBadRequestError(f"A vaga {vaga} já esta cadastrada")
+        if not vaga:
+            raise HttpBadRequestError(f"A vaga {vaga.identificacao} nao esta cadastrada")
         
 
     @staticmethod
     def __valida_status(status: str) -> None:
         if not status:
             raise HttpBadRequestError("O status é obrigatório")
-        if status not in [1, 0]: 
-            raise HttpBadRequestError("Status inválido. Valores aceitos: 1 = 'ativo' ou 0 = 'inativo'")
+        if status not in [1, 2]: 
+            raise HttpBadRequestError("Status inválido. Valores aceitos: 1 = 'ativo' ou 2 = 'inativo'")
 
     @staticmethod
     def __valida_data_fabricacao(data_fabricacao: date) -> None:
         
         if not data_fabricacao:
             raise HttpBadRequestError("A data de fabricação é obrigatória")
+        
+        try:
+            data_fabricacao = datetime.strptime(data_fabricacao, "%Y-%m-%d").date()
+        except ValueError:
+            raise HttpBadRequestError("A data de fabricação deve estar no formato YYYY-MM-DD")
+
+
         if not isinstance(data_fabricacao, date):
             raise HttpBadRequestError("A data de fabricação deve ser uma data válida")
         

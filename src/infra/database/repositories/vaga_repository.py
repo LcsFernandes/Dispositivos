@@ -9,7 +9,7 @@ class VagaRepository(VagaRepositoryInterface):
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT id, deposito_id, identificacao
-                FROM dw_vagas
+                FROM dw_vaga
                 WHERE identificacao = ?;
                 """
             params = (identificacao,)
@@ -28,7 +28,7 @@ class VagaRepository(VagaRepositoryInterface):
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT id, deposito_id, identificacao
-                FROM dw_vagas
+                FROM dw_vaga
                 WHERE id = ?;
                 """
             params = (id,)
@@ -48,7 +48,7 @@ class VagaRepository(VagaRepositoryInterface):
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT id, deposito_id, identificacao
-                FROM dw_vagas
+                FROM dw_vaga
                 """
             try:
                 database_connection.execute(query)
@@ -64,7 +64,7 @@ class VagaRepository(VagaRepositoryInterface):
     def inserir_vaga(self, deposito_id: int, identificacao: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                INSERT INTO dw_vagas (deposito_id, identificacao)
+                INSERT INTO dw_vaga (deposito_id, identificacao)
                 VALUES (?, ?);
                 """
             params = (deposito_id, identificacao)
@@ -76,7 +76,7 @@ class VagaRepository(VagaRepositoryInterface):
     def atualizar_vaga(self, id: int, deposito_id: int, identificacao: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                UPDATE dw_vagas 
+                UPDATE dw_vaga 
                 SET deposito_id = ?, identificacao = ? 
                 WHERE id = ?;
                 """

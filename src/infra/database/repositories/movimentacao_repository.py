@@ -7,10 +7,10 @@ from datetime import datetime
 class MovimentacaoRepository(MovimentacaoRepositoryInterface):
 
     
-    def get_movimentacao(self, id_dispositivo: int) -> List[Movimentacao]:
+    def get_movimentacao_por_dispositivo(self, id_dispositivo: int) -> List[Movimentacao]:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, id_dispositivo, local_origem, local_destino, data_movimentacao, usuario_id, tipo
+                SELECT id, id_dispositivo, local_origem, local_destino, data_movimentacao, login_id
                 FROM dw_movimentacao_dispositivo
                 WHERE id_dispositivo = ?;
                 """
@@ -29,7 +29,7 @@ class MovimentacaoRepository(MovimentacaoRepositoryInterface):
     def get_all_movimentacoes(self) -> List[Movimentacao]:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, id_dispositivo, local_origem, local_destino, data_movimentacao, usuario_id, tipo
+                SELECT id, id_dispositivo, local_origem, local_destino, data_movimentacao, login_id
                 FROM dw_movimentacao_dispositivo;
                 """
             try:
@@ -40,13 +40,13 @@ class MovimentacaoRepository(MovimentacaoRepositoryInterface):
                 raise exception
 
     
-    def registrar_movimentacao(self, id_dispositivo: int, local_origem: int, local_destino: int, data_movimentacao: datetime, usuario_id: int, tipo: int) -> None:
+    def registrar_movimentacao(self, id_dispositivo: int, local_origem: int, local_destino: int, data_movimentacao: datetime, login_id: int) -> None:
         with DatabaseConnection() as database_connection:
             query = """
-                INSERT INTO dw_movimentacao_dispositivo (id_dispositivo, local_origem, local_destino, data_movimentacao, usuario_id, tipo)
-                VALUES (?, ?, ?, ?, ?, ?);
+                INSERT INTO dw_movimentacao_dispositivo (id_dispositivo, local_origem, local_destino, data_movimentacao, login_id)
+                VALUES (?, ?, ?, ?, ?);
                 """
-            params = (id_dispositivo, local_origem, local_destino, data_movimentacao, usuario_id, tipo)
+            params = (id_dispositivo, local_origem, local_destino, data_movimentacao, login_id)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:

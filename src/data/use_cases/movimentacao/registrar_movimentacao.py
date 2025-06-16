@@ -18,12 +18,11 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
         self.__valida_dispositivo(dto.id_dispositivo)
         self.__valida_local(dto.local_origem)
         self.__valida_local(dto.local_destino)
-        self.__valida_usuario(dto.usuario_id)
-        self.__valida_tipo(dto.tipo)
+        self.__valida_usuario(dto.login_id)
 
         data_movimentacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        self.__movimentacao_repository.registrar_movimentacao(dto.id_dispositivo, dto.local_origem, dto.local_destino, data_movimentacao, dto.usuario_id, dto.tipo)      
+        self.__movimentacao_repository.registrar_movimentacao(dto.id_dispositivo, dto.local_origem, dto.local_destino, data_movimentacao, dto.login_id)      
     
     
     def __valida_dispositivo(self, id_dispositivo: int):
@@ -46,11 +45,6 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
             raise HttpBadRequestError("Vaga nao encontrada")
     
     @staticmethod
-    def __valida_usuario(usuario_id: int):
-        if not isinstance(usuario_id, int) or usuario_id <= 0:
+    def __valida_usuario(login_id: int):
+        if not isinstance(login_id, int) or login_id <= 0:
             raise HttpBadRequestError("usuario_id é um campo inteiro positivo obrigatório")
-    
-    @staticmethod
-    def __valida_tipo(tipo: int):
-        if not isinstance(tipo, int) or tipo <= 0:
-            raise HttpBadRequestError("tipo é um campo inteiro positivo obrigatório")

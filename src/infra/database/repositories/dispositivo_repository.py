@@ -55,13 +55,13 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 raise exception
 
    
-    def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime) -> None:
+    def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                INSERT INTO dw_dispositivos (codigo, tipo, descricao, vaga, status, data_fabricacao)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO dw_dispositivos (codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """
-            params = (codigo, tipo, descricao, vaga, status, data_fabricacao,)
+            params = (codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:

@@ -8,6 +8,13 @@ from src.domain.use_cases.dispositivo.listar_dispositivos import ListarDispositi
 from src.domain.use_cases.dispositivo.verificar_status_dispositivo import VerificarStatusDispositivo as VerificarStatusDispositivoInterface
 from src.presentation.http_types.http_request import HttpRequest
 from src.presentation.http_types.http_response import HttpResponse
+from src.data.dto.dispositivo.alterar_dispositivo_dto import AlterarDispositivoDTO
+from src.data.dto.dispositivo.buscar_dispositivo_dto import BuscarDispositivoDTO
+from src.data.dto.dispositivo.excluir_dispositivo_dto import ExcluirDispositivoDTO
+from src.data.dto.dispositivo.inserir_dipositivo_dto import InserirDispositivoDTO
+from src.data.dto.dispositivo.verificar_status_dispositivos_dto import VerificarStatusDispositivoDTO 
+
+
 
 class AlterarDispositivoController(ControllerInterface):
     
@@ -23,7 +30,9 @@ class AlterarDispositivoController(ControllerInterface):
         status = http_request.body["status"]
         data_fabricacao = http_request.body["data_fabricacao"]
 
-        response = self.__use_case.alterar_dispositivo(id, codigo, tipo, descricao, vaga, status, data_fabricacao)
+        dto = AlterarDispositivoDTO(id=id, codigo=codigo, tipo=tipo, descricao=descricao, vaga=vaga, status=status, data_fabricacao=data_fabricacao)
+
+        response = self.__use_case.alterar_dispositivo(dto)
 
         return HttpResponse(status_code=201, body=response)
 
@@ -35,7 +44,9 @@ class BuscarDispositivosByCodigoController(ControllerInterface):
     def handle(self, http_request: HttpRequest) -> HttpResponse:
         codigo = http_request.path_params["codigo"]
 
-        response = self.__use_case.buscar_dispositivo_by_codigo(codigo)
+        dto = BuscarDispositivoDTO(codigo=codigo)
+
+        response = self.__use_case.buscar_dispositivo_by_codigo(dto)
 
         return HttpResponse(status_code=200, body=response)
     
@@ -47,7 +58,9 @@ class BuscarDispositivoByIdController(ControllerInterface):
     def handle(self, http_request: HttpRequest) -> HttpResponse:
         id = http_request.path_params["id"]
 
-        response = self.__use_case.buscar_dispositivo_by_id(id)
+        dto = BuscarDispositivoDTO(id=id)
+
+        response = self.__use_case.buscar_dispositivo_by_id(dto)
 
         return  HttpResponse(status_code=200, body=response)
     
@@ -59,7 +72,9 @@ class ExcluirDispositivoController(ControllerInterface):
     def handle(self, http_request: HttpRequest) -> HttpResponse:
         codigo = http_request.path_params["codigo"]
 
-        response = self.__use_case.excluir_dispositivo(codigo)
+        dto = ExcluirDispositivoDTO(codigo=codigo)
+
+        response = self.__use_case.excluir_dispositivo(dto)
 
         return HttpResponse(status_code=204, body=response)
     
@@ -75,9 +90,11 @@ class InserirDispositivoController(ControllerInterface):
         vaga = http_request.body["vaga"]
         status = http_request.body["status"]
         data_fabricacao = http_request.body["data_fabricacao"]
-        cliente = http_request.body["cliente"]
+        cliente = http_request.body.get("cliente")
 
-        response = self.__use_case.inserir_dispositivo(codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
+        dto = InserirDispositivoDTO(codigo=codigo, tipo=tipo, descricao=descricao, vaga=vaga, status=status, data_fabricacao=data_fabricacao, cliente=cliente)
+
+        response = self.__use_case.inserir_dispositivo(dto)
 
         return HttpResponse(status_code=201, body=response)
 
@@ -100,6 +117,8 @@ class VerificarStatusDispositivoController(ControllerInterface):
     def handle(self, http_request: HttpRequest) -> HttpResponse:
         codigo = http_request.query_params["codigo"]
 
-        response = self.__use_case(codigo)
+        dto = VerificarStatusDispositivoDTO(codigo=codigo)
+
+        response = self.__use_case(dto)
 
         return HttpResponse(status_code=200, body=response)

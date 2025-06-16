@@ -50,8 +50,8 @@ def alterar_dispositivo():
     return jsonify(http_response.body), http_response.status_code
 
 
-@dispositivo_route_bp.route("/dispositivo", methods=["DELETE"])
-def excluir_dispositivo():
+@dispositivo_route_bp.route("/dispositivo/<string:codigo>", methods=["DELETE"])
+def excluir_dispositivo(codigo):
     http_response = None
     
     try:
@@ -62,8 +62,8 @@ def excluir_dispositivo():
     return jsonify(http_response.body), http_response.status_code
 
 
-@dispositivo_route_bp.route("/dispositivo/find_by_id", methods=["GET"])
-def buscar_dispositivo_by_id():
+@dispositivo_route_bp.route("/dispositivo/find_by_id/<int:id>", methods=["GET"])
+def buscar_dispositivo_by_id(id):
     http_response = None
     
     try:
@@ -74,8 +74,8 @@ def buscar_dispositivo_by_id():
     return jsonify(http_response.body), http_response.status_code
 
 
-@dispositivo_route_bp.route("/dispositivo/find_by_codigo", methods=["GET"])
-def buscar_dispositivo_by_codigo():
+@dispositivo_route_bp.route("/dispositivo/find_by_codigo/<string:codigo>", methods=["GET"])
+def buscar_dispositivo_by_codigo(codigo):
     http_response = None
     
     try:
