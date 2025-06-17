@@ -28,7 +28,6 @@ class ListarDispositivo(ListarDispositivosInterface):
                 "codigo": dispositivo.codigo,
                 "tipo": dispositivo.tipo,
                 "descricao": dispositivo.descricao,
-                "vaga": dispositivo.vaga,
                 "status": dispositivo.status,
                 "data_fabricacao": dispositivo.data_fabricacao.strftime('%Y-%m-%d'),
                 "cliente": dispositivo.cliente                

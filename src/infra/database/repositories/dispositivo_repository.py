@@ -55,27 +55,27 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 raise exception
 
    
-    def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
+    def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
                 INSERT INTO dw_dispositivos (codigo, tipo, descricao, status, data_fabricacao, cliente)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """
-            params = (codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
+            params = (codigo, tipo, descricao, status, data_fabricacao, cliente)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:
                 raise exception
 
     
-    def atualizar_dispositivo(self, id: int, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
+    def atualizar_dispositivo(self, id: int, codigo: str, tipo: int, descricao: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
                     UPDATE dw_dispositivos
                     SET codigo = ?, tipo = ?, descricao = ?, status = ?, data_fabricacao = ?, cliente = ?
                     WHERE id = ?
                 """
-            params = (codigo, tipo, descricao, vaga, status, data_fabricacao, cliente, id,)
+            params = (codigo, tipo, descricao, status, data_fabricacao, cliente, id,)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:
