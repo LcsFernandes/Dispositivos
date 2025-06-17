@@ -7,7 +7,6 @@ class InserirDispositivoDTO:
     codigo: str
     tipo: int
     descricao: str
-    vaga: str
     status: int
     data_fabricacao: datetime
     cliente: Optional[str] = None

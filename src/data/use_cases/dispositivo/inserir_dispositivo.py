@@ -8,19 +8,17 @@ from datetime import datetime, date
 
 class InserirDispositivo(InserirDispositivoInterface):
 
-    def __init__ (self, dispositivo_repository: DispositivoRepositoryInterface, vaga_repository: VagaRepositoryInterface):
+    def __init__ (self, dispositivo_repository: DispositivoRepositoryInterface):
         self.__dispositivo_repository = dispositivo_repository
-        self.__vaga_repository = vaga_repository
 
     def inserir_dispositivo(self, dto: InserirDispositivoDTO):  
         self.__valida_codigo(dto.codigo)    
         self.__valida_tipo(dto.tipo)    
-        self.__valida_descricao(dto.descricao)  
-        self.__valida_vaga(dto.vaga)    
+        self.__valida_descricao(dto.descricao)     
         self.__valida_status(dto.status)    
         self.__valida_data_fabricacao(dto.data_fabricacao)
 
-        self.__dispositivo_repository.adicionar_dispositivo(dto.codigo, dto.tipo, dto.descricao, dto.vaga, dto.status, dto.data_fabricacao, dto.cliente)
+        self.__dispositivo_repository.adicionar_dispositivo(dto.codigo, dto.tipo, dto.descricao, dto.status, dto.data_fabricacao, dto.cliente)
         
     
     
@@ -46,23 +44,6 @@ class InserirDispositivo(InserirDispositivoInterface):
         if not descricao or not descricao.strip():
             raise HttpBadRequestError("A descrição é obrigatória")
 
-    
-    def __valida_vaga(self, vaga: str) -> None:
-        if vaga is None:
-            raise HttpBadRequestError("A vaga é obrigatória")
-        
-        if not isinstance(vaga, str):
-            raise HttpBadRequestError("A vaga deve ser uma string")
-        
-        if len(vaga) < 3:
-            raise HttpBadRequestError("Nome inválido para vaga")
-        
-        vaga = self.__vaga_repository.get_vaga_by_identificacao(vaga)
-
-        if not vaga:
-            raise HttpBadRequestError(f"A vaga {vaga.identificacao} nao esta cadastrada")
-        
-
     @staticmethod
     def __valida_status(status: str) -> None:
         if not status:
@@ -80,7 +61,6 @@ class InserirDispositivo(InserirDispositivoInterface):
             data_fabricacao = datetime.strptime(data_fabricacao, "%Y-%m-%d").date()
         except ValueError:
             raise HttpBadRequestError("A data de fabricação deve estar no formato YYYY-MM-DD")
-
 
         if not isinstance(data_fabricacao, date):
             raise HttpBadRequestError("A data de fabricação deve ser uma data válida")

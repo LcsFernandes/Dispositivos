@@ -29,10 +29,6 @@ class AlterarDispositivo(AlterarDispositivoInterface):
             self.__valida_descricao(dto.descricao)
             dispositivo.descricao = dto.descricao
 
-        if dto.vaga is not None:
-            self.__valida_vaga(dto.vaga)
-            dispositivo.vaga = dto.vaga
-
         if dto.status is not None:
             self.__valida_status(dto.status)
             dispositivo.status = dto.status
@@ -47,7 +43,6 @@ class AlterarDispositivo(AlterarDispositivoInterface):
             dispositivo.codigo,
             dispositivo.tipo,
             dispositivo.descricao,
-            dispositivo.vaga,
             dispositivo.status,
             dispositivo.data_fabricacao,
             dispositivo.cliente
@@ -72,13 +67,6 @@ class AlterarDispositivo(AlterarDispositivoInterface):
     def __valida_descricao(descricao: str) -> None:
         if not isinstance(descricao, str) or len(descricao.strip()) == 0:
             raise HttpBadRequestError("Descrição não pode estar vazia")
-
-    @staticmethod
-    def __valida_vaga(vaga: str) -> None:
-        if not isinstance(vaga, str) or len(vaga.strip()) == 0:
-            raise HttpBadRequestError("Vaga não pode estar vazia")
-        if len(vaga.strip()) < 3:
-            raise HttpBadRequestError("Vaga invalida")
 
     @staticmethod
     def __valida_status(status: int) -> None:

@@ -8,7 +8,6 @@ class AlterarDispositivoDTO:
     codigo: Optional[str] = None
     tipo: Optional[int] = None
     descricao: Optional[str] = None
-    vaga: Optional[str] = None
     status: Optional[int] = None
     data_fabricacao: Optional[datetime] = None
     cliente: Optional[str] = None

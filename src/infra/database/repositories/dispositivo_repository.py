@@ -10,7 +10,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_dispositivo_by_codigo(self, codigo: str) -> Dispositivo:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao
+                SELECT id, codigo, tipo, descricao, status, data_fabricacao, cliente
                 FROM dw_dispositivos
                 WHERE codigo = ?;
                 """
@@ -27,7 +27,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_dispositivo_by_id(self, id: int) -> Dispositivo:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao, cliente
+                SELECT id, codigo, tipo, descricao, status, data_fabricacao, cliente
                 FROM dw_dispositivos
                 WHERE id = ?;
                 """
@@ -44,7 +44,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_all_dispositivos(self) -> List[Dispositivo]:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, vaga, status, data_fabricacao, cliente
+                SELECT id, codigo, tipo, descricao, status, data_fabricacao, cliente
                 FROM dw_dispositivos;
                 """
             try:
@@ -58,7 +58,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                INSERT INTO dw_dispositivos (codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
+                INSERT INTO dw_dispositivos (codigo, tipo, descricao, status, data_fabricacao, cliente)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """
             params = (codigo, tipo, descricao, vaga, status, data_fabricacao, cliente)
@@ -68,14 +68,14 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 raise exception
 
     
-    def atualizar_dispositivo(self, id: int, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime) -> None:
+    def atualizar_dispositivo(self, id: int, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
                     UPDATE dw_dispositivos
-                    SET codigo = ?, tipo = ?, descricao = ?, vaga = ?, status = ?, data_fabricacao = ?
+                    SET codigo = ?, tipo = ?, descricao = ?, status = ?, data_fabricacao = ?, cliente = ?
                     WHERE id = ?
                 """
-            params = (codigo, tipo, descricao, vaga, status, data_fabricacao, id,)
+            params = (codigo, tipo, descricao, vaga, status, data_fabricacao, cliente, id,)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:
@@ -98,18 +98,15 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def verificar_status_dispositivo(self, codigo: str) -> bool:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT status
-                FROM dw_dispositivos
+                SELECT status.nome
+                FROM dw_dispositivos dispositivos
+                INNER JOIN dw_status_dispositivo status
+                ON  status.id = dispositivos.status
                 WHERE codigo = ?;"""
             params = (codigo,)
             try:
                 database_connection.execute(query, params)
                 result = database_connection.fetchone()
-                
-                if result is not None and result[0] == 1:
-                    return True
-                
-                return False
-                
+                return result
             except Exception as exception:
                 raise exception

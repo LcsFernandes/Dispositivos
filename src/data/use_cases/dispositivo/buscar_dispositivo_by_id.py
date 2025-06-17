@@ -14,7 +14,7 @@ class BuscarDispositivoById(BuscarDispositivosByIdInterface):
     def buscar_dispositivo_by_id(self, dto: BuscarDispositivoDTO) -> Dispositivo:
         self.__valida_id_dispositivo(dto.id)
         
-        dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(id)
+        dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(dto.id)
         if not dispositivo:
             raise HttpNotFoundError(f"Dispositivo com id {dto.id} não encontrado.")
         
@@ -38,9 +38,9 @@ class BuscarDispositivoById(BuscarDispositivosByIdInterface):
                     "codigo": dispositivo.codigo,
                     "tipo": dispositivo.tipo,
                     "descricao": dispositivo.descricao,
-                    "vaga": dispositivo.vaga,
                     "status": dispositivo.status,
-                    "data_fabricacao": dispositivo.data_fabricacao
+                    "data_fabricacao": dispositivo.data_fabricacao.strftime('%Y-%m-%d'),
+                    "cliente": dispositivo.cliente
                 }
         }
 

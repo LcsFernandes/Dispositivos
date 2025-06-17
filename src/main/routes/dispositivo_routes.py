@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-
+import json
 from src.main.adapters.request_adapter import request_adapter
 
 from src.main.composers.dispositivo.alterar_dispositivo_composer import alterar_dispositivo_composer
@@ -23,7 +23,7 @@ def listar_dispositivos():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 @dispositivo_route_bp.route("/dispositivo", methods=["POST"])
@@ -35,7 +35,7 @@ def inserir_dispositivo():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 @dispositivo_route_bp.route("/dispositivo", methods=["PUT"])
@@ -47,7 +47,7 @@ def alterar_dispositivo():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 @dispositivo_route_bp.route("/dispositivo/<string:codigo>", methods=["DELETE"])
@@ -59,7 +59,7 @@ def excluir_dispositivo(codigo):
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 @dispositivo_route_bp.route("/dispositivo/find_by_id/<int:id>", methods=["GET"])
@@ -71,7 +71,7 @@ def buscar_dispositivo_by_id(id):
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 @dispositivo_route_bp.route("/dispositivo/find_by_codigo/<string:codigo>", methods=["GET"])
@@ -83,7 +83,7 @@ def buscar_dispositivo_by_codigo(codigo):
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 
@@ -96,4 +96,4 @@ def verificar_status_dispositivo():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code

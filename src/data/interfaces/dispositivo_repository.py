@@ -18,11 +18,11 @@ class DispositivoRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
+    def adicionar_dispositivo(self, codigo: str, tipo: int, descricao: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
         pass
 
     @abstractmethod
-    def atualizar_dispositivo(self, codigo: str, tipo: int, descricao: str, vaga: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
+    def atualizar_dispositivo(self, codigo: str, tipo: int, descricao: str, status: int, data_fabricacao: datetime, cliente: str) -> None:
         pass
 
     @abstractmethod

@@ -119,6 +119,6 @@ class VerificarStatusDispositivoController(ControllerInterface):
 
         dto = VerificarStatusDispositivoDTO(codigo=codigo)
 
-        response = self.__use_case(dto)
+        response = self.__use_case.verificar_status_dispositivo(dto)
 
         return HttpResponse(status_code=200, body=response)

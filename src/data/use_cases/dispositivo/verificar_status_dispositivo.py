@@ -18,9 +18,11 @@ class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
             raise HttpNotFoundError("Dispositivo nao encontrado")
         
         status_dispositivo = self.__dispositivo_repository.verificar_status_dispositivo(dto.codigo)
-        response = self.__formatar_resposta(dto.codigo, status_dispositivo)
-
-        return response
+        
+        if status_dispositivo is not None:
+            
+            response = self.__formatar_resposta(dto.codigo, status_dispositivo[0])
+            return response
 
     @staticmethod
     def __valida_codigo_dispositivo(codigo: str):
