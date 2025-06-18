@@ -59,7 +59,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
         with DatabaseConnection() as database_connection:
             query = """ 
                 INSERT INTO dw_dispositivos (codigo, tipo, descricao, status, data_fabricacao, cliente)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """
             params = (codigo, tipo, descricao, status, data_fabricacao, cliente)
             try:

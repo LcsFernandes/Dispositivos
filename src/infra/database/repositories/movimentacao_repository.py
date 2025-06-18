@@ -17,11 +17,9 @@ class MovimentacaoRepository(MovimentacaoRepositoryInterface):
             params = (id_dispositivo,)
             try:
                 database_connection.execute(query, params)
-                result = database_connection.fetchone()
+                results = database_connection.fetchall()
 
-                if result:
-                    return Movimentacao(*result)
-                return None
+                return [Movimentacao(*item) for item in results] if results else []
             except Exception as exception:
                 raise exception
 

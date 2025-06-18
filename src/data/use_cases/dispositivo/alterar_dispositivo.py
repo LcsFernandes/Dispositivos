@@ -2,7 +2,7 @@ from src.data.interfaces.dispositivo_repository import DispositivoRepositoryInte
 from src.data.dto.dispositivo.alterar_dispositivo_dto import AlterarDispositivoDTO
 from src.domain.use_cases.dispositivo.alterar_dispositivo import AlterarDispositivo as AlterarDispositivoInterface 
 from src.errors.types import HttpBadRequestError
-from datetime import datetime
+from datetime import date, datetime
 
 class AlterarDispositivo(AlterarDispositivoInterface):
 
@@ -70,12 +70,20 @@ class AlterarDispositivo(AlterarDispositivoInterface):
 
     @staticmethod
     def __valida_status(status: int) -> None:
-        if not isinstance(status, int) or status not in (0, 1):
-            raise HttpBadRequestError("Status deve ser 0 (inativo) ou 1 (ativo)")
+        if not isinstance(status, int) or status not in (1, 2):
+            raise HttpBadRequestError("Status deve ser 1 (inativo) ou 2 (ativo)")
 
     @staticmethod
-    def __valida_data_fabricacao(data: datetime) -> None:
-        if not isinstance(data, datetime):
+    def __valida_data_fabricacao(data: date) -> None:
+
+        if isinstance(data, str):
+            try:
+                data = datetime.strptime(data, "%Y-%m-%d")
+            except ValueError:
+                raise HttpBadRequestError("Data de fabricação deve estar no formato YYYY-MM-DD")
+
+        
+        if not isinstance(data, date):
             raise HttpBadRequestError("Data de fabricação deve ser um datetime válido")
         if data > datetime.now():
             raise HttpBadRequestError("Data de fabricação não pode estar no futuro")

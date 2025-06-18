@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
+import json
 
 from src.main.adapters.request_adapter import request_adapter
 
@@ -22,7 +23,7 @@ def listar_vagas():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 @vaga_route_bp.route("/vaga", methods=["POST"])
@@ -34,7 +35,7 @@ def inserir_vaga():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
 @vaga_route_bp.route("/vaga", methods=["PUT"])
@@ -46,11 +47,11 @@ def alterar_vaga():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
-@vaga_route_bp.route("/vaga/find_by_id", methods=["GET"])
-def buscar_vaga_by_id():
+@vaga_route_bp.route("/vaga/find_by_id/<int:id>", methods=["GET"])
+def buscar_vaga_by_id(id):
     http_response = None
     
     try:
@@ -58,11 +59,11 @@ def buscar_vaga_by_id():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 
-@vaga_route_bp.route("/vaga/find_by_identificacao", methods=["GET"])
-def buscar_vaga_by_identificacao():
+@vaga_route_bp.route("/vaga/find_by_identificacao/<string:identificacao>", methods=["GET"])
+def buscar_vaga_by_identificacao(identificacao):
     http_response = None
     
     try:
@@ -70,4 +71,4 @@ def buscar_vaga_by_identificacao():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code

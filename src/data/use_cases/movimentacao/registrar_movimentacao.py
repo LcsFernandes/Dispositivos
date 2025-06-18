@@ -47,4 +47,4 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
     @staticmethod
     def __valida_usuario(login_id: int):
         if not isinstance(login_id, int) or login_id <= 0:
-            raise HttpBadRequestError("usuario_id é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("login_id é um campo inteiro positivo obrigatório")

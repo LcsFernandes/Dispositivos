@@ -15,22 +15,20 @@ from src.data.dto.dispositivo.inserir_dipositivo_dto import InserirDispositivoDT
 from src.data.dto.dispositivo.verificar_status_dispositivos_dto import VerificarStatusDispositivoDTO 
 
 
-
 class AlterarDispositivoController(ControllerInterface):
     
     def __init__(self, use_case: AlterarDispositivoInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        id = http_request.body["id"]
-        codigo = http_request.body["codigo"]
-        tipo = http_request.body["tipo"]
-        descricao = http_request.body["descricao"]
-        vaga = http_request.body["vaga"]
-        status = http_request.body["status"]
-        data_fabricacao = http_request.body["data_fabricacao"]
+        id = http_request.path_params["id_dispositivo"]
+        codigo = http_request.body.get("codigo")
+        tipo = http_request.body.get("tipo")
+        descricao = http_request.body.get("descricao")
+        status = http_request.body.get("status")
+        data_fabricacao = http_request.body.get("data_fabricacao")
 
-        dto = AlterarDispositivoDTO(id=id, codigo=codigo, tipo=tipo, descricao=descricao, vaga=vaga, status=status, data_fabricacao=data_fabricacao)
+        dto = AlterarDispositivoDTO(id=id, codigo=codigo, tipo=tipo, descricao=descricao, status=status, data_fabricacao=data_fabricacao)
 
         response = self.__use_case.alterar_dispositivo(dto)
 
@@ -87,12 +85,11 @@ class InserirDispositivoController(ControllerInterface):
         codigo = http_request.body["codigo"]
         tipo = http_request.body["tipo"]
         descricao = http_request.body["descricao"]
-        vaga = http_request.body["vaga"]
         status = http_request.body["status"]
         data_fabricacao = http_request.body["data_fabricacao"]
         cliente = http_request.body.get("cliente")
 
-        dto = InserirDispositivoDTO(codigo=codigo, tipo=tipo, descricao=descricao, vaga=vaga, status=status, data_fabricacao=data_fabricacao, cliente=cliente)
+        dto = InserirDispositivoDTO(codigo=codigo, tipo=tipo, descricao=descricao, status=status, data_fabricacao=data_fabricacao, cliente=cliente)
 
         response = self.__use_case.inserir_dispositivo(dto)
 

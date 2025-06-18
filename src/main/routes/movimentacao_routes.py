@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
+import json
 
 from src.data.dto.movimentacao.buscar_movimentacao_dto import BuscarMovimentacaoDTO
 from src.data.dto.movimentacao.registrar_movimentacao_dto import RegistrarMovimentacaoDTO
@@ -23,7 +24,7 @@ def listar_movimentacoes():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 @movimentacao_route_bp.route("/movimentacao", methods=["POST"])
 def registrar_movimentacao():
@@ -34,7 +35,7 @@ def registrar_movimentacao():
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code
 
 @movimentacao_route_bp.route("/movimentacao/find/<int:id_dispositivo>", methods=["GET"])
 def buscar_movimentacao(id_dispositivo):
@@ -45,4 +46,4 @@ def buscar_movimentacao(id_dispositivo):
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return jsonify(http_response.body), http_response.status_code
+    return json.dumps(http_response.body), http_response.status_code

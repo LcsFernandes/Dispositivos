@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 import json
 from src.main.adapters.request_adapter import request_adapter
 
@@ -38,8 +38,8 @@ def inserir_dispositivo():
     return json.dumps(http_response.body), http_response.status_code
 
 
-@dispositivo_route_bp.route("/dispositivo", methods=["PUT"])
-def alterar_dispositivo():
+@dispositivo_route_bp.route("/dispositivo/<int:id_dispositivo>", methods=["PUT"])
+def alterar_dispositivo(id_dispositivo):
     http_response = None
     
     try:
