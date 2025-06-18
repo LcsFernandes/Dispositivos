@@ -33,6 +33,9 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
         
         if not dispositivo:
             raise HttpBadRequestError(f"Dispositivo id {id_dispositivo} nao encontrado")
+        
+        if dispositivo.status != "ativo":
+            raise HttpBadRequestError(f"o dispositivo id {dispositivo.id} não esta ativo")
     
     
     def __valida_local(self, local: int):

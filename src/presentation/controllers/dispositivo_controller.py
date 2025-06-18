@@ -6,6 +6,7 @@ from src.domain.use_cases.dispositivo.excluir_dispositivo import ExcluirDisposit
 from src.domain.use_cases.dispositivo.inserir_dispositivo import InserirDispositivo as InserirDispositivoInterface
 from src.domain.use_cases.dispositivo.listar_dispositivos import ListarDispositivos as ListarDispositivoInterface
 from src.domain.use_cases.dispositivo.verificar_status_dispositivo import VerificarStatusDispositivo as VerificarStatusDispositivoInterface
+from src.domain.use_cases.dispositivo.buscar_posicao_dispositivo import BuscarPosicaoDispositivo as BuscarPosicaoDispositivoInterface
 from src.presentation.http_types.http_request import HttpRequest
 from src.presentation.http_types.http_response import HttpResponse
 from src.data.dto.dispositivo.alterar_dispositivo_dto import AlterarDispositivoDTO
@@ -117,5 +118,19 @@ class VerificarStatusDispositivoController(ControllerInterface):
         dto = VerificarStatusDispositivoDTO(codigo=codigo)
 
         response = self.__use_case.verificar_status_dispositivo(dto)
+
+        return HttpResponse(status_code=200, body=response)
+    
+class BuscarPosicaoDispositivoController(ControllerInterface):
+
+    def __init__(self, use_case: BuscarPosicaoDispositivoInterface):
+        self.__use_case = use_case
+
+    def handle(self, http_request: HttpRequest) -> HttpResponse:
+        codigo = http_request.query_params["codigo"]
+
+        dto = BuscarDispositivoDTO(codigo=codigo)
+
+        response = self.__use_case.buscar_posicao_dispositivo(dto)
 
         return HttpResponse(status_code=200, body=response)

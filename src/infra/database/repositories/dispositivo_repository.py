@@ -95,7 +95,7 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 raise exception
 
     
-    def verificar_status_dispositivo(self, codigo: str) -> bool:
+    def verificar_status_dispositivo(self, codigo: str):
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT status.nome
@@ -103,6 +103,28 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 INNER JOIN dw_status_dispositivo status
                 ON  status.id = dispositivos.status
                 WHERE codigo = ?;"""
+            params = (codigo,)
+            try:
+                database_connection.execute(query, params)
+                result = database_connection.fetchone()
+                return result
+            except Exception as exception:
+                raise exception
+            
+    
+    
+    def buscar_posicao_dispositivo(self, codigo: str):
+        with DatabaseConnection() as database_connection:
+            query = """ 
+                SELECT TOP(1) dispositivo.codigo AS dispositivo, vaga.identificacao AS vaga
+                FROM dw_movimentacao_dispositivo movimentacao
+                INNER JOIN dw_dispositivos dispositivo
+                    ON movimentacao.id_dispositivo = dispositivo.id
+                INNER JOIN dw_vaga vaga
+                    ON movimentacao.local_destino = vaga.id
+                WHERE dispositivo.codigo = ?
+                ORDER BY movimentacao.data_movimentacao DESC
+                """
             params = (codigo,)
             try:
                 database_connection.execute(query, params)

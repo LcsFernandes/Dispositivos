@@ -9,6 +9,7 @@ from src.main.composers.dispositivo.excluir_dispositivo_composer import excluir_
 from src.main.composers.dispositivo.inserir_dispositivo_composer import inserir_dispositivo_composer
 from src.main.composers.dispositivo.listar_dispositivo_composer import listar_dispositivo_composer
 from src.main.composers.dispositivo.verificar_status_dispositivo_composer import verificar_status_dispositivo_composer
+from src.main.composers.dispositivo.buscar_posicao_dispositivo_composer import buscar_posicao_dispositivo_composer
 
 from src.errors.error_handle import handle_errors
 
@@ -93,6 +94,17 @@ def verificar_status_dispositivo():
     
     try:
         http_response = request_adapter(request, verificar_status_dispositivo_composer())
+    except Exception as exception:
+        http_response = handle_errors(exception)
+    
+    return json.dumps(http_response.body), http_response.status_code
+
+@dispositivo_route_bp.route("/dispositivo/posicao", methods=["GET"])
+def buscar_posicao_dispositivo():
+    http_response = None
+    
+    try:
+        http_response = request_adapter(request, buscar_posicao_dispositivo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     

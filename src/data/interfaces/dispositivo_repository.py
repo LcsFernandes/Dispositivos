@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from src.domain.entities.dispositivo import Dispositivo
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 class DispositivoRepositoryInterface(ABC):
 
@@ -31,4 +31,8 @@ class DispositivoRepositoryInterface(ABC):
 
     @abstractmethod
     def verificar_status_dispositivo(self, codigo: str) -> bool:
+        pass
+
+    @abstractmethod
+    def buscar_posicao_dispositivo(self, codigo: str) -> Dict:
         pass
