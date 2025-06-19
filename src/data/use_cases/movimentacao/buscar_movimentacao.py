@@ -24,10 +24,10 @@ class BuscarMovimentacao(BuscarMovimentacaoInterface):
     @staticmethod
     def __valida_id(id_dispositivo: int) -> None:
         if not id_dispositivo:
-            raise HttpBadRequestError("id da movimentacao é um campo obrigatorio")
+            raise HttpBadRequestError("id da movimentacao e um campo obrigatorio")
         
         if not isinstance(id_dispositivo, int) or id_dispositivo < 0:
-            raise HttpBadRequestError("o id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o id e um campo obrigatorio inteiro positivo")
 
 
     @staticmethod

@@ -22,5 +22,5 @@ class ExcluirDispositivo(ExcluirDispositivoInterface):
     @staticmethod
     def __valida_codigo_dispositivo(codigo: str) -> None:
         if not codigo:
-            raise HttpBadRequestError("codigo do dispositivo é obrigatorio")
+            raise HttpBadRequestError("codigo do dispositivo e obrigatorio")
             

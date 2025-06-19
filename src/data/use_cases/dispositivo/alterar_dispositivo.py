@@ -15,7 +15,7 @@ class AlterarDispositivo(AlterarDispositivoInterface):
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(dto.id)
         
         if not dispositivo:
-            raise HttpBadRequestError("dispositivo não encontrado")
+            raise HttpBadRequestError("dispositivo nao encontrado")
 
         if dto.codigo is not None:
             self.__valida_codigo(dto.codigo)
@@ -56,17 +56,17 @@ class AlterarDispositivo(AlterarDispositivoInterface):
     @staticmethod
     def __valida_codigo(codigo: str) -> None:
         if not isinstance(codigo, str) or len(codigo.strip()) < 3:
-            raise HttpBadRequestError("Código deve conter pelo menos 3 caracteres")
+            raise HttpBadRequestError("Codigo deve conter pelo menos 3 caracteres")
 
     @staticmethod
     def __valida_tipo(tipo: int) -> None:
         if not isinstance(tipo, int) or tipo < 0:
-            raise HttpBadRequestError("Tipo deve ser um número inteiro não negativo")
+            raise HttpBadRequestError("Tipo deve ser um numero inteiro nao negativo")
 
     @staticmethod
     def __valida_descricao(descricao: str) -> None:
         if not isinstance(descricao, str) or len(descricao.strip()) == 0:
-            raise HttpBadRequestError("Descrição não pode estar vazia")
+            raise HttpBadRequestError("Descricao nao pode estar vazia")
 
     @staticmethod
     def __valida_status(status: int) -> None:
@@ -80,13 +80,13 @@ class AlterarDispositivo(AlterarDispositivoInterface):
             try:
                 data = datetime.strptime(data, "%Y-%m-%d")
             except ValueError:
-                raise HttpBadRequestError("Data de fabricação deve estar no formato YYYY-MM-DD")
+                raise HttpBadRequestError("Data de fabricacao deve estar no formato YYYY-MM-DD")
 
         
         if not isinstance(data, date):
-            raise HttpBadRequestError("Data de fabricação deve ser um datetime válido")
+            raise HttpBadRequestError("Data de fabricacao deve ser um datetime valido")
         if data > datetime.now():
-            raise HttpBadRequestError("Data de fabricação não pode estar no futuro")
+            raise HttpBadRequestError("Data de fabricaçao não pode estar no futuro")
 
 
             

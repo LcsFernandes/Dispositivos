@@ -24,10 +24,10 @@ class BuscarVagaById(BuscarVagaByIdInterface):
     @staticmethod
     def __valida_id(id: int) -> None:
         if not id:
-            raise HttpBadRequestError("id da vaga é um campo obrigatorio")
+            raise HttpBadRequestError("id da vaga e um campo obrigatorio")
         
         if not isinstance(id, int) or id < 0:
-            raise HttpBadRequestError("o id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o id e um campo obrigatorio inteiro positivo")
         
     
     @staticmethod

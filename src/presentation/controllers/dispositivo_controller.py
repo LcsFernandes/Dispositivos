@@ -55,7 +55,7 @@ class BuscarDispositivoByIdController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        id = http_request.path_params["id"]
+        id = http_request.path_params["id_dispositivo"]
 
         dto = BuscarDispositivoDTO(id=id)
 

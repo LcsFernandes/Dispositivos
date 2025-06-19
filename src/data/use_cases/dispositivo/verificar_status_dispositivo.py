@@ -27,7 +27,7 @@ class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
     @staticmethod
     def __valida_codigo_dispositivo(codigo: str):
         if not codigo or not isinstance(codigo, str):
-            raise HttpBadRequestError("codigo do dispositivo é um campo tipo string obrigatorio")
+            raise HttpBadRequestError("codigo do dispositivo e um campo tipo string obrigatorio")
     
     @staticmethod
     def __formatar_resposta(codigo: str, status: bool) -> Dict:

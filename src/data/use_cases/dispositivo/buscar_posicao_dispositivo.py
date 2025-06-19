@@ -16,19 +16,19 @@ class BuscarPosicaoDispositivo(BuscarPosicaoDispositivoInterface):
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(dto.codigo)
 
         if not dispositivo:
-            raise HttpNotFoundError(f"Dispositivo com código {dto.codigo} não encontrado.")
+            raise HttpNotFoundError(f"Dispositivo com codigo {dto.codigo} nao encontrado.")
 
         posicao_dispositivo = self.__dispositivo_repository.buscar_posicao_dispositivo(dto.codigo)
 
         if not posicao_dispositivo:
-            raise HttpNotFoundError(f"Dispositivo com código {dto.codigo} não movimentado em nenhuma vaga.")
+            raise HttpNotFoundError(f"Dispositivo com codigo {dto.codigo} nao movimentado em nenhuma vaga.")
 
         return self.__formatar_resposta(posicao_dispositivo.dispositivo, posicao_dispositivo.vaga)
 
     @staticmethod
     def __valida_codigo_dispositivo(codigo: str) -> None:
         if not isinstance(codigo, str) or not codigo.strip():
-            raise HttpBadRequestError("Código do dispositivo é obrigatório e deve ser uma string válida.")
+            raise HttpBadRequestError("Codigo do dispositivo e obrigatorio e deve ser uma string valida.")
 
     @staticmethod
     def __formatar_resposta(dispositivo: str, vaga: str) -> Dict:

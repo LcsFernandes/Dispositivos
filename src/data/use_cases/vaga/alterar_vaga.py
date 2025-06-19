@@ -19,18 +19,18 @@ class AlterarVaga(AlterarvagaInterface):
     @staticmethod 
     def __valida_id(id: int):
         if not id or not isinstance(id, int) or id < 0:
-            raise HttpBadRequestError("o id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o id e um campo obrigatorio inteiro positivo")
         
     @staticmethod   
     def __valida_deposito_id(deposito_id: int):
         if not deposito_id or not isinstance(deposito_id, int) or deposito_id < 0:
-            raise HttpBadRequestError("o deposito_id é um campo obrigatorio inteiro positivo")
+            raise HttpBadRequestError("o deposito_id e um campo obrigatorio inteiro positivo")
         if deposito_id != 74:
             raise HttpBadRequestError("deposito_id informado nao pertence ao armazem de dispositivos")
     
     @staticmethod
     def __valida_identificacao(identificacao: str):
         if not identificacao:
-            raise HttpBadRequestError("identificacao da vaga é um campo obrigatorio")
+            raise HttpBadRequestError("identificacao da vaga e um campo obrigatorio")
         if len(identificacao) < 3:
             raise HttpBadRequestError("Nome de identificacao para vaga invalido")

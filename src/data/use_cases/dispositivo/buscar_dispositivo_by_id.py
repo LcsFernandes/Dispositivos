@@ -16,7 +16,7 @@ class BuscarDispositivoById(BuscarDispositivosByIdInterface):
         
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(dto.id)
         if not dispositivo:
-            raise HttpNotFoundError(f"Dispositivo com id {dto.id} não encontrado.")
+            raise HttpNotFoundError(f"Dispositivo com id {dto.id} nao encontrado.")
         
         response = self.__formatar_resposta(dispositivo)
         
@@ -26,7 +26,7 @@ class BuscarDispositivoById(BuscarDispositivosByIdInterface):
     @staticmethod
     def __valida_id_dispositivo(id: int) -> None:
         if not id or id < 0:
-            raise HttpBadRequestError("id do dispositivo é um parametro obrigatório inteiro positivo")
+            raise HttpBadRequestError("id do dispositivo e um parametro obrigatorio inteiro positivo")
         
         
     @staticmethod

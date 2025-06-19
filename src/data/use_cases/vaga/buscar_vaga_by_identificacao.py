@@ -24,7 +24,7 @@ class BuscarVagaByIdentificacao(BuscarVagaByIdentificacaoInterface):
     @staticmethod
     def __valida_identificacao(identificacao: str) -> None:
         if not identificacao:
-            raise HttpBadRequestError("identificacao da vaga é um campo obrigatorio")
+            raise HttpBadRequestError("identificacao da vaga e um campo obrigatorio")
         
         if len(identificacao) < 3:
             raise HttpBadRequestError("Identificacao incorreta")

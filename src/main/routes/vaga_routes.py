@@ -9,6 +9,9 @@ from src.main.composers.vaga.buscar_vaga_by_identificacao_composer import buscar
 from src.main.composers.vaga.inserir_vaga_composer import inserir_vaga_composer
 from src.main.composers.vaga.listar_vaga_composer import listar_vaga_composer
 
+from src.validators.vaga_validator import inserir_vaga_validator, alterar_vaga_validator
+from src.validators.general_validators import codigo_validator, id_validator
+
 from src.errors.error_handle import handle_errors
 
 vaga_route_bp = Blueprint("vaga_routes", __name__)
@@ -31,6 +34,7 @@ def inserir_vaga():
     http_response = None
     
     try:
+        inserir_vaga_validator(request.get_json())
         http_response = request_adapter(request, inserir_vaga_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
@@ -43,6 +47,7 @@ def alterar_vaga():
     http_response = None
     
     try:
+        alterar_vaga_validator(request.get_json())
         http_response = request_adapter(request, alterar_vaga_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
@@ -50,11 +55,15 @@ def alterar_vaga():
     return json.dumps(http_response.body), http_response.status_code
 
 
-@vaga_route_bp.route("/vaga/find_by_id/<int:id>", methods=["GET"])
+@vaga_route_bp.route("/vaga/find_by_id/<id_vaga>", methods=["GET"])
 def buscar_vaga_by_id(id):
     http_response = None
     
     try:
+        id_vaga = request.view_args["id_vaga"]
+        id_validator(id_vaga)
+
+        request.view_args["id_vaga"] = int(id_vaga)
         http_response = request_adapter(request, buscar_vaga_by_id_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
@@ -62,11 +71,12 @@ def buscar_vaga_by_id(id):
     return json.dumps(http_response.body), http_response.status_code
 
 
-@vaga_route_bp.route("/vaga/find_by_identificacao/<string:identificacao>", methods=["GET"])
+@vaga_route_bp.route("/vaga/find_by_identificacao/<identificacao>", methods=["GET"])
 def buscar_vaga_by_identificacao(identificacao):
     http_response = None
     
     try:
+        codigo_validator(identificacao)
         http_response = request_adapter(request, buscar_vaga_by_identificacao_composer())
     except Exception as exception:
         http_response = handle_errors(exception)

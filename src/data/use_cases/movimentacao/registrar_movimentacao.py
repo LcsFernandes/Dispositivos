@@ -27,7 +27,7 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
     
     def __valida_dispositivo(self, id_dispositivo: int):
         if not id_dispositivo or id_dispositivo < 0:
-            raise HttpBadRequestError("id_dispositivo é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("id_dispositivo e um campo inteiro positivo obrigatorio")
          
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(id_dispositivo)
         
@@ -35,12 +35,12 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
             raise HttpBadRequestError(f"Dispositivo id {id_dispositivo} nao encontrado")
         
         if dispositivo.status != "ativo":
-            raise HttpBadRequestError(f"o dispositivo id {dispositivo.id} não esta ativo")
+            raise HttpBadRequestError(f"o dispositivo id {dispositivo.id} nao esta ativo")
     
     
     def __valida_local(self, local: int):
         if not local or not isinstance(local, int) or local < 0:
-            raise HttpBadRequestError("local é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("local e um campo inteiro positivo obrigatorio")
         
         vaga = self.__vaga_repository.get_vaga_by_id(local)
 
@@ -50,4 +50,4 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
     @staticmethod
     def __valida_usuario(login_id: int):
         if not isinstance(login_id, int) or login_id <= 0:
-            raise HttpBadRequestError("login_id é um campo inteiro positivo obrigatório")
+            raise HttpBadRequestError("login_id e um campo inteiro positivo obrigatorio")

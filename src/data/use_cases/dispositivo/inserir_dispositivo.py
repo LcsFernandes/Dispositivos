@@ -24,7 +24,7 @@ class InserirDispositivo(InserirDispositivoInterface):
     
     def __valida_codigo(self, codigo: str) -> None:
         if not codigo:
-            raise HttpBadRequestError("O codigo é obrigatorio para inserir o dispositivo")
+            raise HttpBadRequestError("O codigo e obrigatorio para inserir o dispositivo")
         
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(codigo)
 
@@ -34,7 +34,7 @@ class InserirDispositivo(InserirDispositivoInterface):
     @staticmethod
     def __valida_tipo(tipo: int) -> None:
         if not tipo:
-            raise HttpBadRequestError("O tipo é um parametro obrigatorio")
+            raise HttpBadRequestError("O tipo e um parametro obrigatorio")
     
         if not isinstance(tipo, int):
             raise HttpBadRequestError("O tipo deve ser integer")
@@ -42,28 +42,28 @@ class InserirDispositivo(InserirDispositivoInterface):
     @staticmethod
     def __valida_descricao(descricao: str) -> None:
         if not descricao or not descricao.strip():
-            raise HttpBadRequestError("A descrição é obrigatória")
+            raise HttpBadRequestError("A descricao e obrigatória")
 
     @staticmethod
     def __valida_status(status: str) -> None:
         if not status:
-            raise HttpBadRequestError("O status é obrigatório")
+            raise HttpBadRequestError("O status e obrigatorio")
         if status not in [1, 2]: 
-            raise HttpBadRequestError("Status inválido. Valores aceitos: 1 = 'ativo' ou 2 = 'inativo'")
+            raise HttpBadRequestError("Status invalido. Valores aceitos: 1 = 'ativo' ou 2 = 'inativo'")
 
     @staticmethod
     def __valida_data_fabricacao(data_fabricacao: date) -> None:
         
         if not data_fabricacao:
-            raise HttpBadRequestError("A data de fabricação é obrigatória")
+            raise HttpBadRequestError("A data de fabricacao é obrigatoria")
         
         try:
             data_fabricacao = datetime.strptime(data_fabricacao, "%Y-%m-%d").date()
         except ValueError:
-            raise HttpBadRequestError("A data de fabricação deve estar no formato YYYY-MM-DD")
+            raise HttpBadRequestError("A data de fabricacao deve estar no formato YYYY-MM-DD")
 
         if not isinstance(data_fabricacao, date):
-            raise HttpBadRequestError("A data de fabricação deve ser uma data válida")
+            raise HttpBadRequestError("A data de fabricacao deve ser uma data valida")
         
         if data_fabricacao > date.today():
-            raise HttpBadRequestError("A data de fabricação Não pode ser maior do que a data atual")
+            raise HttpBadRequestError("A data de fabricaçao nao pode ser maior do que a data atual")

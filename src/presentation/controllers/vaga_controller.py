@@ -18,8 +18,8 @@ class AlterarVagaController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        id = http_request.body["id"]
-        identificacao = http_request.body["identificacao"]
+        id = http_request.body.get("id")
+        identificacao = http_request.body.get("identificacao")
 
         dto = AlterarVagaDTO(id=id, identificacao=identificacao)
         response = self.__use_case.alterar_vaga(dto)
@@ -32,7 +32,7 @@ class BuscarVagaByIdController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        id = http_request.path_params["id"]
+        id = http_request.path_params["id_vaga"]
 
         dto = BuscarVagaByIdDTO(id=id)
 
