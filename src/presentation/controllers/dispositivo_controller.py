@@ -28,8 +28,9 @@ class AlterarDispositivoController(ControllerInterface):
         descricao = http_request.body.get("descricao")
         status = http_request.body.get("status")
         data_fabricacao = http_request.body.get("data_fabricacao")
+        cliente = http_request.body.get("cliente")
 
-        dto = AlterarDispositivoDTO(id=id, codigo=codigo, tipo=tipo, descricao=descricao, status=status, data_fabricacao=data_fabricacao)
+        dto = AlterarDispositivoDTO(id=id, codigo=codigo, tipo=tipo, descricao=descricao, status=status, data_fabricacao=data_fabricacao, cliente=cliente)
 
         response = self.__use_case.alterar_dispositivo(dto)
 

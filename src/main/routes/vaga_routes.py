@@ -9,8 +9,8 @@ from src.main.composers.vaga.buscar_vaga_by_identificacao_composer import buscar
 from src.main.composers.vaga.inserir_vaga_composer import inserir_vaga_composer
 from src.main.composers.vaga.listar_vaga_composer import listar_vaga_composer
 
-from src.validators.vaga_validator import inserir_vaga_validator, alterar_vaga_validator
-from src.validators.general_validators import codigo_validator, id_validator
+# from src.validators.vaga_validator import inserir_vaga_validator, alterar_vaga_validator
+# from src.validators.general_validators import codigo_validator, id_validator
 
 from src.errors.error_handle import handle_errors
 

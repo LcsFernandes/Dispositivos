@@ -10,9 +10,13 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_dispositivo_by_codigo(self, codigo: str) -> Dispositivo:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, status, data_fabricacao, cliente
-                FROM dw_dispositivos
-                WHERE codigo = ?;
+                SELECT dispositivos.id, dispositivos.codigo, tipo_dispositivo.nome AS tipo , dispositivos.descricao, status_dispositivo.nome AS status, dispositivos.data_fabricacao, dispositivos.cliente
+                FROM dw_dispositivos dispositivos
+                INNER JOIN dw_status_dispositivo status_dispositivo
+                    ON dispositivos.status = status_dispositivo.id
+                INNER JOIN dw_tipo_dispositivo tipo_dispositivo
+                    ON dispositivos.tipo = tipo_dispositivo.id
+                WHERE dispositivos.codigo = ?;
                 """
             params = (codigo,)
             try:
@@ -27,9 +31,13 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_dispositivo_by_id(self, id: int) -> Dispositivo:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, status, data_fabricacao, cliente
-                FROM dw_dispositivos
-                WHERE id = ?;
+                SELECT dispositivos.id, dispositivos.codigo, tipo_dispositivo.nome AS tipo, dispositivos.descricao, status_dispositivo.nome AS status, dispositivos.data_fabricacao, dispositivos.cliente
+                FROM dw_dispositivos dispositivos
+                INNER JOIN dw_status_dispositivo status_dispositivo
+                    ON dispositivos.status = status_dispositivo.id
+                INNER JOIN dw_tipo_dispositivo tipo_dispositivo
+                    ON dispositivos.tipo = tipo_dispositivo.id
+                WHERE dispositivos.id = ?;
                 """
             params = (id,)
             try:
@@ -44,8 +52,12 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     def get_all_dispositivos(self) -> List[Dispositivo]:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, codigo, tipo, descricao, status, data_fabricacao, cliente
-                FROM dw_dispositivos;
+                SELECT dispositivos.id, dispositivos.codigo, tipo_dispositivo.nome AS tipo , dispositivos.descricao, status_dispositivo.nome AS status, dispositivos.data_fabricacao, dispositivos.cliente
+                FROM dw_dispositivos dispositivos
+                INNER JOIN dw_status_dispositivo status_dispositivo
+                    ON dispositivos.status = status_dispositivo.id
+                INNER JOIN dw_tipo_dispositivo tipo_dispositivo
+                    ON dispositivos.tipo = tipo_dispositivo.id
                 """
             try:
                 database_connection.execute(query)

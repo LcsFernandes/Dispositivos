@@ -1,5 +1,5 @@
-from flask import Blueprint, request
-import json
+from fastapi import APIRouter, Request, Body, Depends
+from fastapi.responses import JSONResponse
 
 from src.main.adapters.request_adapter import request_adapter
 
@@ -12,115 +12,107 @@ from src.main.composers.dispositivo.listar_dispositivo_composer import listar_di
 from src.main.composers.dispositivo.verificar_status_dispositivo_composer import verificar_status_dispositivo_composer
 from src.main.composers.dispositivo.buscar_posicao_dispositivo_composer import buscar_posicao_dispositivo_composer
 
-from src.validators.dispositivo_validator import inserir_dispositivo_validator, alterar_dispositivo_validator
-from src.validators.general_validators import codigo_validator, id_validator
+from src.main.adapters.dto.dispositivo_dto import InserirDispositivoDTO, VerificarCodigoDispositivoDTO
 
 from src.errors.error_handle import handle_errors
 
-dispositivo_route_bp = Blueprint("dispositivo_routes", __name__)
+router = APIRouter(prefix="/dispositivo", tags=["dispostivo"])
 
-@dispositivo_route_bp.route("/dispositivo/list", methods=["GET"])
-def listar_dispositivos():
+@router.get("/list")
+async def listar_dispositivos(request: Request):
     http_response = None
     
     try:
-        http_response = request_adapter(request, listar_dispositivo_composer())
+        http_response = await request_adapter(request, listar_dispositivo_composer())
     except Exception as exception:
-        http_response = handle_errors(exception)
+        http_response =  handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@dispositivo_route_bp.route("/dispositivo", methods=["POST"])
-def inserir_dispositivo():
+@router.post("")
+async def inserir_dispositivo(request: Request, body: InserirDispositivoDTO):
     http_response = None
     
     try:
-        inserir_dispositivo_validator(request.get_json())
-        http_response = request_adapter(request, inserir_dispositivo_composer())
+        http_response = await request_adapter(request, inserir_dispositivo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@dispositivo_route_bp.route("/dispositivo/<id_dispositivo>", methods=["PUT"])
-def alterar_dispositivo(id_dispositivo):
+@router.put("/{id_dispositivo}")
+async def alterar_dispositivo(id_dispositivo: int, request: Request):
     http_response = None
     
     try:
-        id_validator(id_dispositivo)
-        alterar_dispositivo_validator(request.get_json())
-        http_response = request_adapter(request, alterar_dispositivo_composer())
+        request.scope["path_params"] = {"id_dispositivo": id_dispositivo}
+        http_response = await request_adapter(request, alterar_dispositivo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@dispositivo_route_bp.route("/dispositivo/<string:codigo>", methods=["DELETE"])
-def excluir_dispositivo(codigo):
+@router.delete("/{codigo}")
+async def excluir_dispositivo(codigo: str, request: Request):
     http_response = None
     
     try:
-        codigo_validator(codigo)
-        http_response = request_adapter(request, excluir_dispositivo_composer())
+        request.scope["path_params"] = {"codigo": codigo}
+        http_response =  await request_adapter(request, excluir_dispositivo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@dispositivo_route_bp.route("/dispositivo/find_by_id/<id_dispositivo>", methods=["GET"])
-def buscar_dispositivo_by_id(id_dispositivo):
+@router.get("/find_by_id/{id_dispositivo}")
+async def buscar_dispositivo_by_id(id_dispositivo: int, request: Request):
     http_response = None
     
     try:
-        id_dispositivo = request.view_args["id_dispositivo"]
-        id_validator(id_dispositivo)
-
-        request.view_args["id_dispositivo"] = int(id_dispositivo)
-        http_response = request_adapter(request, buscar_dispositivo_by_id_composer())
+        request.scope["path_params"] = {"id_dispositivo": id_dispositivo}
+        http_response = await request_adapter(request, buscar_dispositivo_by_id_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@dispositivo_route_bp.route("/dispositivo/find_by_codigo/<codigo>", methods=["GET"])
-def buscar_dispositivo_by_codigo(codigo):
+@router.get("/find_by_codigo/{codigo}")
+async def buscar_dispositivo_by_codigo(codigo: str, request: Request):
     http_response = None
     
     try:
-        codigo_validator(codigo)
-        http_response = request_adapter(request, buscar_dispositivo_by_codigo_composer())
+        request.scope["path_params"] = {"codigo": codigo}
+        http_response = await request_adapter(request, buscar_dispositivo_by_codigo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
 
-@dispositivo_route_bp.route("/dispositivo/verificar_status", methods=["GET"])
-def verificar_status_dispositivo():
+@router.get("/verificar_status")
+async def verificar_status_dispositivo(request: Request, codigo: VerificarCodigoDispositivoDTO = Depends()):
     http_response = None
     
     try:
-        codigo_validator(request.args)
-        http_response = request_adapter(request, verificar_status_dispositivo_composer())
+        http_response = await request_adapter(request, verificar_status_dispositivo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
-@dispositivo_route_bp.route("/dispositivo/posicao", methods=["GET"])
-def buscar_posicao_dispositivo():
+@router.get("/posicao")
+async def buscar_posicao_dispositivo(request: Request, codigo: VerificarCodigoDispositivoDTO = Depends()):
     http_response = None
     
     try:
-        codigo_validator(request.args)
-        http_response = request_adapter(request, buscar_posicao_dispositivo_composer())
+        http_response = await request_adapter(request, buscar_posicao_dispositivo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)

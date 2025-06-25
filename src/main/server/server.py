@@ -1,35 +1,115 @@
-from flask import Flask, request
-from src.main.routes.dispositivo_routes import dispositivo_route_bp
-from src.main.routes.movimentacao_routes import movimentacao_route_bp
-from src.main.routes.vaga_routes import vaga_route_bp
+from fastapi import FastAPI, Request
+from starlette.responses import Response
+from src.main.routes import dispositivo_routes
+from src.main.routes import movimentacao_routes
+from src.main.routes import vaga_routes
 from src.infra.logger.logger import get_logger
 import time
 
-app = Flask(__name__)
+app = FastAPI()
 
-app.register_blueprint(dispositivo_route_bp)
-app.register_blueprint(movimentacao_route_bp)
-app.register_blueprint(vaga_route_bp)
+app.include_router(dispositivo_routes.router)
+#app.include_router(movimentacao_routes.router)
+#app.include_router(vaga_routes.router)
+
 
 logger = get_logger()
 
-@app.before_request
-def start_timer():
-    request.start_time = time.time()
+# @app.middleware("http")
+# async def log_requests(request: Request, call_next):
+#     start_time = time.time()
 
-@app.after_request
-def log_request(response):
-    duration = time.time() - getattr(request, 'start_time', time.time())
-    # Parâmetros enviados (query, form, json)
-    params = {
-        "args": request.args.to_dict(),
-        "form": request.form.to_dict(),
-        "json": request.get_json(silent=True)
-    }
-    # Corpo da resposta (atenção: pode ser grande!)
-    response_data = response.get_data(as_text=True)
+#     params = {}
+#     try:
+
+#         params["args"] = dict(request.query_params)
+
+#         params["json"] = await request.json()
+#     except Exception:
+#         params["json"] = None
+#     try:
+#         form = await request.form()
+#         params["form"] = dict(form)
+#     except Exception:
+#         params["form"] = None
+
+
+#     response: Response = await call_next(request)
+    
+#     process_time = time.time() - start_time
+
+#     response_body = b""
+#     async for chunk in response.body_iterator:
+#         response_body += chunk
+#     response.body_iterator = iterate_in_chunks(response_body)
+
+#     try:
+#         response_text = response_body.decode("utf-8")
+#     except Exception:
+#         response_text = "<não pôde decodificar>"
+
+#     logger.info(
+#         f"{request.method} {request.url.path} | "
+#         f"Status: {response.status_code} | "
+#         f"Tempo: {process_time:.4f}s | "
+#         f"IP: {request.client.host} | "
+#         f"Params: {params} | "
+#         f"Response: {response_text}"
+#     )
+#     return response
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    params = {}
+    
+    # Verificar o Content-Type primeiro
+    content_type = request.headers.get("content-type", "")
+    params["content_type"] = content_type
+    
+    try:
+        if "application/json" in content_type:
+            # Tentar ler o JSON apenas se for do tipo correto
+            params["json"] = await request.json()
+        else:
+            params["json"] = None
+    except Exception:
+        params["json"] = None
+    
+    try:
+        form = await request.form()
+        params["form"] = dict(form)
+    except Exception:
+        params["form"] = None
+    
+    response: Response = await call_next(request)
+    process_time = time.time() - start_time
+    
+    # Log adicional para debugging
+    logger.debug(f"Content-Type: {content_type}")
+    if params["json"] is None and "application/json" in content_type:
+        logger.warning("JSON não pôde ser decodificado")
+    
+    response_body = b""
+    async for chunk in response.body_iterator:
+        response_body += chunk
+    response.body_iterator = iterate_in_chunks(response_body)
+    
+    try:
+        response_text = response_body.decode("utf-8")
+    except Exception:
+        response_text = "<não pôde decodificar>"
+    
     logger.info(
-        f"{request.method} {request.path} | Status: {response.status_code} | Tempo: {duration:.4f}s | "
-        f"IP: {request.remote_addr} | Params: {params} | Response: {response_data}"
+        f"{request.method} {request.url.path} | "
+        f"Status: {response.status_code} | "
+        f"Tempo: {process_time:.4f}s | "
+        f"IP: {request.client.host} | "
+        f"Params: {params} | "
+        f"Response: {response_text}"
     )
     return response
+
+async def iterate_in_chunks(content: bytes, chunk_size: int = 4096):
+     for i in range(0, len(content), chunk_size):
+        yield content[i:i+chunk_size]

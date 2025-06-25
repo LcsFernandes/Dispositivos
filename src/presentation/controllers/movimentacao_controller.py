@@ -14,9 +14,9 @@ class BuscarMovimentacaoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        id_dispositivo = http_request.path_params["id_dispositivo"]
+        codigo = http_request.path_params["codigo"]
 
-        dto = BuscarMovimentacaoDTO(id_dispositivo=id_dispositivo)
+        dto = BuscarMovimentacaoDTO(codigo=codigo)
 
         response = self.__use_case.buscar_movimentacao(dto)
 
@@ -39,12 +39,12 @@ class RegistrarMovimentacaoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        id_dispositivo = http_request.body["id_dispositivo"]
+        codigo = http_request.body["codigo"]
         local_origem = http_request.body["local_origem"]
         local_destino = http_request.body["local_destino"]
         login_id = http_request.body["login_id"]
 
-        dto = RegistrarMovimentacaoDTO(id_dispositivo=id_dispositivo, local_origem=local_origem, local_destino=local_destino, login_id=login_id)
+        dto = RegistrarMovimentacaoDTO(codigo=codigo, local_origem=local_origem, local_destino=local_destino, login_id=login_id)
         
         response = self.__use_case.registrar_movimentacao(dto)
 

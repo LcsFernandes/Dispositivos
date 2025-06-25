@@ -10,8 +10,8 @@ from src.main.composers.movimentacao.buscar_movimentacao_composer import buscar_
 from src.main.composers.movimentacao.registar_movimentacao_composer import registrar_movimentacao_composer
 from src.main.composers.movimentacao.listar_movimentacao_composer import listar_movimentacao_composer
 
-from src.validators.movimentacao_validator import inserir_movimentacao_validator
-from src.validators.general_validators import id_validator
+# from src.validators.movimentacao_validator import inserir_movimentacao_validator
+# from src.validators.general_validators import codigo_validator
 
 from src.errors.error_handle import handle_errors
 
@@ -41,15 +41,12 @@ def registrar_movimentacao():
     
     return json.dumps(http_response.body), http_response.status_code
 
-@movimentacao_route_bp.route("/movimentacao/find/<id_dispositivo>", methods=["GET"])
-def buscar_movimentacao(id_dispositivo):
+@movimentacao_route_bp.route("/movimentacao/find/<string:codigo>", methods=["GET"])
+def buscar_movimentacao(codigo):
     http_response = None
     
     try:
-        id_dispositivo = request.view_args["id_dispositivo"]
-        id_validator(id_dispositivo)
-
-        request.view_args["id_dispositivo"] = int(id_dispositivo)
+        codigo_validator(codigo)
         http_response = request_adapter(request, buscar_movimentacao_composer())
     except Exception as exception:
         http_response = handle_errors(exception)

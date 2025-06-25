@@ -15,37 +15,60 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
 
 
     def registrar_movimentacao(self, dto: RegistrarMovimentacaoDTO):
-        self.__valida_dispositivo(dto.id_dispositivo)
-        self.__valida_local(dto.local_origem)
-        self.__valida_local(dto.local_destino)
+        id_dispositivo = self.__valida_dispositivo(dto.codigo)
+        id_vaga_origem = self.__valida_local_origem(dto.local_origem)
+        self.__valida_posicao(dto.codigo, dto.local_origem)
+        id_vaga_destino = self.__valida_local_destino(dto.local_destino)
         self.__valida_usuario(dto.login_id)
 
         data_movimentacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        self.__movimentacao_repository.registrar_movimentacao(dto.id_dispositivo, dto.local_origem, dto.local_destino, data_movimentacao, dto.login_id)      
+        self.__movimentacao_repository.registrar_movimentacao(id_dispositivo, id_vaga_origem, id_vaga_destino, data_movimentacao, dto.login_id)      
     
     
-    def __valida_dispositivo(self, id_dispositivo: int):
-        if not id_dispositivo or id_dispositivo < 0:
-            raise HttpBadRequestError("id_dispositivo e um campo inteiro positivo obrigatorio")
+    def __valida_dispositivo(self, codigo: str):
+        if not codigo or len(codigo.strip()) <= 3:
+            raise HttpBadRequestError("Codigo do dispositivo inexistente ou invalido")
          
-        dispositivo = self.__dispositivo_repository.get_dispositivo_by_id(id_dispositivo)
+        dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(codigo)
         
         if not dispositivo:
-            raise HttpBadRequestError(f"Dispositivo id {id_dispositivo} nao encontrado")
+            raise HttpBadRequestError(f"Dispositivo {codigo} nao encontrado")
         
-        if dispositivo.status != "ativo":
-            raise HttpBadRequestError(f"o dispositivo id {dispositivo.id} nao esta ativo")
+        if dispositivo.status != "Ativo":
+            raise HttpBadRequestError(f"o dispositivo {dispositivo.codigo} nao esta ativo")
+        
+        return dispositivo.id
     
     
-    def __valida_local(self, local: int):
-        if not local or not isinstance(local, int) or local < 0:
-            raise HttpBadRequestError("local e um campo inteiro positivo obrigatorio")
+    def __valida_local_origem(self, local_origem: str):
+        if not local_origem or not isinstance(local_origem, str) or len(local_origem.strip()) < 3:
+            raise HttpBadRequestError("Local de origem inexistente ou invalido")
         
-        vaga = self.__vaga_repository.get_vaga_by_id(local)
+        vaga = self.__vaga_repository.get_vaga_by_identificacao(local_origem)
 
         if not vaga:
-            raise HttpBadRequestError("Vaga nao encontrada")
+            raise HttpBadRequestError("Vaga de origem nao encontrada")
+        
+        return vaga.id
+        
+    def __valida_posicao(self, codigo: str, local_origem: str):
+
+        posicao = self.__dispositivo_repository.buscar_posicao_dispositivo(codigo)
+        
+        if posicao[1] != local_origem:
+            raise HttpBadRequestError("Dispositivo nao encontrado na vaga de origem. Nao e possivel realizar a movimentacao.")
+
+    def __valida_local_destino(self, local_destino: int):
+        if not local_destino or not isinstance(local_destino, str) or len(local_destino.strip()) < 3:
+            raise HttpBadRequestError("Local de destino inexistente ou invalido")
+        
+        vaga = self.__vaga_repository.get_vaga_by_identificacao(local_destino)
+
+        if not vaga:
+            raise HttpBadRequestError("Vaga de destino nao encontrada")
+    
+        return vaga.id
     
     @staticmethod
     def __valida_usuario(login_id: int):

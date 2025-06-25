@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-from datetime import datetime
 
 @dataclass(frozen=True)
 class RegistrarMovimentacaoDTO:
-    id_dispositivo: int
-    local_origem: int
-    local_destino: int
+    codigo: str
+    local_origem: str
+    local_destino: str
     login_id: int

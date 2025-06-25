@@ -7,14 +7,20 @@ from datetime import datetime
 class MovimentacaoRepository(MovimentacaoRepositoryInterface):
 
     
-    def get_movimentacao_por_dispositivo(self, id_dispositivo: int) -> List[Movimentacao]:
+    def get_movimentacao_por_dispositivo(self, codigo: str) -> List[Movimentacao]:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, id_dispositivo, local_origem, local_destino, data_movimentacao, login_id
-                FROM dw_movimentacao_dispositivo
-                WHERE id_dispositivo = ?;
+                SELECT TOP(50) movimentacao_dispositivo.id, dispositivo.codigo, vaga.identificacao AS local_origem, vaga2.identificacao AS local_destino, movimentacao_dispositivo.data_movimentacao, movimentacao_dispositivo.login_id
+                FROM dw_movimentacao_dispositivo movimentacao_dispositivo
+                INNER JOIN dw_vaga vaga
+                ON movimentacao_dispositivo.local_origem = vaga.id
+                INNER JOIN dw_vaga vaga2
+                ON movimentacao_dispositivo.local_destino = vaga2.id
+                INNER JOIN dw_dispositivos dispositivo
+                ON movimentacao_dispositivo.id_dispositivo = dispositivo.id
+                WHERE dispositivo.codigo = ?;
                 """
-            params = (id_dispositivo,)
+            params = (codigo,)
             try:
                 database_connection.execute(query, params)
                 results = database_connection.fetchall()

@@ -5,5 +5,5 @@ from typing import List
 class BuscarMovimentacao(ABC):
 
     @abstractmethod
-    def buscar_movimentacao(self, id_dispositivo: int) -> List[Movimentacao]:
+    def buscar_movimentacao(self, codigo: str) -> List[Movimentacao]:
         pass
