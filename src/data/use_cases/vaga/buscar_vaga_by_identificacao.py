@@ -35,7 +35,6 @@ class BuscarVagaByIdentificacao(BuscarVagaByIdentificacaoInterface):
             "type": "Vaga",
             "data": {
                     "id": vaga.id,
-                    "deposito_id": vaga.deposito_id,
                     "identificacao": vaga.identificacao
                 }
         }

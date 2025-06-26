@@ -8,8 +8,8 @@ class VagaRepository(VagaRepositoryInterface):
     def get_vaga_by_identificacao(self, identificacao: str) -> Vaga:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, deposito_id, identificacao
-                FROM dw_vaga
+                SELECT id, identificacao
+                FROM dw_vaga_dispositivo
                 WHERE identificacao = ?;
                 """
             params = (identificacao,)
@@ -27,8 +27,8 @@ class VagaRepository(VagaRepositoryInterface):
     def get_vaga_by_id(self, id: int) -> Vaga:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, deposito_id, identificacao
-                FROM dw_vaga
+                SELECT id, identificacao
+                FROM dw_vaga_dispositivo
                 WHERE id = ?;
                 """
             params = (id,)
@@ -47,8 +47,8 @@ class VagaRepository(VagaRepositoryInterface):
     def listar_vagas(self) -> List[Vaga]:
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, deposito_id, identificacao
-                FROM dw_vaga
+                SELECT id, identificacao
+                FROM dw_vaga_dispositivo
                 """
             try:
                 database_connection.execute(query)
@@ -61,26 +61,26 @@ class VagaRepository(VagaRepositoryInterface):
             except Exception as exception:
                 raise exception
     
-    def inserir_vaga(self, deposito_id: int, identificacao: str) -> None:
+    def inserir_vaga(self, identificacao: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                INSERT INTO dw_vaga (deposito_id, identificacao)
-                VALUES (?, ?);
+                INSERT INTO dw_vaga_dispositivo (identificacao)
+                VALUES (?);
                 """
-            params = (deposito_id, identificacao)
+            params = (identificacao)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:
                 raise exception
 
-    def atualizar_vaga(self, id: int, deposito_id: int, identificacao: str) -> None:
+    def atualizar_vaga(self, id: int, identificacao: str) -> None:
         with DatabaseConnection() as database_connection:
             query = """ 
-                UPDATE dw_vaga 
-                SET deposito_id = ?, identificacao = ? 
+                UPDATE dw_vaga_dispositivo 
+                SET identificacao = ? 
                 WHERE id = ?;
                 """
-            params = (deposito_id, identificacao, id,)
+            params = (identificacao, id,)
             try:
                 database_connection.execute(query, params)
             except Exception as exception:

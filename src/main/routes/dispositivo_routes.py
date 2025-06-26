@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Body, Depends
+from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from src.main.adapters.request_adapter import request_adapter
@@ -12,11 +12,11 @@ from src.main.composers.dispositivo.listar_dispositivo_composer import listar_di
 from src.main.composers.dispositivo.verificar_status_dispositivo_composer import verificar_status_dispositivo_composer
 from src.main.composers.dispositivo.buscar_posicao_dispositivo_composer import buscar_posicao_dispositivo_composer
 
-from src.main.adapters.dto.dispositivo_dto import InserirDispositivoDTO, VerificarCodigoDispositivoDTO
+from src.main.adapters.dto.dispositivo_dto import InserirDispositivoDTO, AlterarDispositivoDTO
 
 from src.errors.error_handle import handle_errors
 
-router = APIRouter(prefix="/dispositivo", tags=["dispostivo"])
+router = APIRouter(prefix="/dispositivo", tags=["Dispostivo"])
 
 @router.get("/list")
 async def listar_dispositivos(request: Request):
@@ -43,7 +43,7 @@ async def inserir_dispositivo(request: Request, body: InserirDispositivoDTO):
 
 
 @router.put("/{id_dispositivo}")
-async def alterar_dispositivo(id_dispositivo: int, request: Request):
+async def alterar_dispositivo(request: Request, id_dispositivo: int, body: AlterarDispositivoDTO):
     http_response = None
     
     try:
@@ -55,12 +55,12 @@ async def alterar_dispositivo(id_dispositivo: int, request: Request):
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@router.delete("/{codigo}")
-async def excluir_dispositivo(codigo: str, request: Request):
+@router.delete("/{codigo_dispositivo}")
+async def excluir_dispositivo(request: Request, codigo_dispositivo: str):
     http_response = None
     
     try:
-        request.scope["path_params"] = {"codigo": codigo}
+        request.scope["path_params"] = {"codigo_dispositivo": codigo_dispositivo}
         http_response =  await request_adapter(request, excluir_dispositivo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
@@ -81,12 +81,12 @@ async def buscar_dispositivo_by_id(id_dispositivo: int, request: Request):
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@router.get("/find_by_codigo/{codigo}")
-async def buscar_dispositivo_by_codigo(codigo: str, request: Request):
+@router.get("/find_by_codigo/{codigo_dispositivo}")
+async def buscar_dispositivo_by_codigo(codigo_dispositivo: str, request: Request):
     http_response = None
     
     try:
-        request.scope["path_params"] = {"codigo": codigo}
+        request.scope["path_params"] = {"codigo_dispositivo": codigo_dispositivo}
         http_response = await request_adapter(request, buscar_dispositivo_by_codigo_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
@@ -96,7 +96,7 @@ async def buscar_dispositivo_by_codigo(codigo: str, request: Request):
 
 
 @router.get("/verificar_status")
-async def verificar_status_dispositivo(request: Request, codigo: VerificarCodigoDispositivoDTO = Depends()):
+async def verificar_status_dispositivo(request: Request, codigo_dispositivo: str):
     http_response = None
     
     try:
@@ -107,7 +107,7 @@ async def verificar_status_dispositivo(request: Request, codigo: VerificarCodigo
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 @router.get("/posicao")
-async def buscar_posicao_dispositivo(request: Request, codigo: VerificarCodigoDispositivoDTO = Depends()):
+async def buscar_posicao_dispositivo(request: Request, codigo_dispositivo: str):
     http_response = None
     
     try:

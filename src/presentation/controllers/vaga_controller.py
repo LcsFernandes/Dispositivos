@@ -18,8 +18,8 @@ class AlterarVagaController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        id = http_request.body.get("id")
-        identificacao = http_request.body.get("identificacao")
+        id = http_request.path_params["id_vaga"]
+        identificacao = http_request.body["identificacao"]
 
         dto = AlterarVagaDTO(id=id, identificacao=identificacao)
         response = self.__use_case.alterar_vaga(dto)
@@ -38,6 +38,9 @@ class BuscarVagaByIdController(ControllerInterface):
 
         response = self.__use_case.buscar_vaga_by_id(dto)
 
+        if response is None:
+            return HttpResponse(status_code=204, body=None)
+
         return HttpResponse(status_code=200, body=response)
     
 class BuscarVagaByIdentificacaoController(ControllerInterface):
@@ -50,6 +53,9 @@ class BuscarVagaByIdentificacaoController(ControllerInterface):
         dto = BuscarVagaByIdentificacaoDTO(identificacao=identificacao)
 
         response = self.__use_case.buscar_vaga_by_identificacao(dto)
+
+        if response is None:
+            return HttpResponse(status_code=204, body=None)    
 
         return HttpResponse(status_code=200, body=response)
     
@@ -68,10 +74,9 @@ class InserirVagaController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        deposito_id = http_request.body["deposito_id"]
         identificacao = http_request.body["identificacao"]
 
-        dto = InserirVagaDTO(deposito_id=deposito_id, identificacao=identificacao)
+        dto = InserirVagaDTO(identificacao=identificacao)
 
         response = self.__use_case.inserir_vaga(dto)
 

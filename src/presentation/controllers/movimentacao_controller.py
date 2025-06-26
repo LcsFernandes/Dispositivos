@@ -14,7 +14,7 @@ class BuscarMovimentacaoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        codigo = http_request.path_params["codigo"]
+        codigo = http_request.path_params["codigo_dispositivo"]
 
         dto = BuscarMovimentacaoDTO(codigo=codigo)
 

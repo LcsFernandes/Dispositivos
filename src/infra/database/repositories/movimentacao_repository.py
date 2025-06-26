@@ -18,7 +18,8 @@ class MovimentacaoRepository(MovimentacaoRepositoryInterface):
                 ON movimentacao_dispositivo.local_destino = vaga2.id
                 INNER JOIN dw_dispositivos dispositivo
                 ON movimentacao_dispositivo.id_dispositivo = dispositivo.id
-                WHERE dispositivo.codigo = ?;
+                WHERE dispositivo.codigo = ?
+                ORDER BY movimentacao_dispositivo.data_movimentacao DESC;
                 """
             params = (codigo,)
             try:

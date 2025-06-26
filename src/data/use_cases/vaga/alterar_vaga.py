@@ -11,22 +11,19 @@ class AlterarVaga(AlterarvagaInterface):
 
     def alterar_vaga(self, dto: AlterarVagaDTO) -> None:
         self.__valida_id(dto.id)
-        self.__valida_deposito_id(dto.deposito_id)
         self.__valida_identificacao(dto.identificacao)
 
-        self.__vaga_repository.atualizar_vaga(dto.id, dto.deposito_id, dto.identificacao)
+        vaga = self.__vaga_repository.get_vaga_by_id(dto.id)
+
+        if not vaga:
+            raise HttpBadRequestError(f"Vaga {dto.id} nao encontrada")
+        
+        self.__vaga_repository.atualizar_vaga(dto.id, dto.identificacao)
     
     @staticmethod 
     def __valida_id(id: int):
         if not id or not isinstance(id, int) or id < 0:
             raise HttpBadRequestError("o id e um campo obrigatorio inteiro positivo")
-        
-    @staticmethod   
-    def __valida_deposito_id(deposito_id: int):
-        if not deposito_id or not isinstance(deposito_id, int) or deposito_id < 0:
-            raise HttpBadRequestError("o deposito_id e um campo obrigatorio inteiro positivo")
-        if deposito_id != 74:
-            raise HttpBadRequestError("deposito_id informado nao pertence ao armazem de dispositivos")
     
     @staticmethod
     def __valida_identificacao(identificacao: str):

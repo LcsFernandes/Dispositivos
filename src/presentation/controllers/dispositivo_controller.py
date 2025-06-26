@@ -42,7 +42,7 @@ class BuscarDispositivosByCodigoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        codigo = http_request.path_params["codigo"]
+        codigo = http_request.path_params["codigo_dispositivo"]
 
         dto = BuscarDispositivoDTO(codigo=codigo)
 
@@ -70,7 +70,7 @@ class ExcluirDispositivoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        codigo = http_request.path_params["codigo"]
+        codigo = http_request.path_params["codigo_dispositivo"]
 
         dto = ExcluirDispositivoDTO(codigo=codigo)
 
@@ -114,7 +114,7 @@ class VerificarStatusDispositivoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        codigo = http_request.query_params["codigo"]
+        codigo = http_request.query_params["codigo_dispositivo"]
 
         dto = VerificarStatusDispositivoDTO(codigo=codigo)
 
@@ -128,7 +128,7 @@ class BuscarPosicaoDispositivoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        codigo = http_request.query_params["codigo"]
+        codigo = http_request.query_params["codigo_dispositivo"]
 
         dto = BuscarDispositivoDTO(codigo=codigo)
 

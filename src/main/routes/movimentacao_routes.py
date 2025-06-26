@@ -1,8 +1,5 @@
-from flask import Blueprint, request
-import json
-
-from src.data.dto.movimentacao.buscar_movimentacao_dto import BuscarMovimentacaoDTO
-from src.data.dto.movimentacao.registrar_movimentacao_dto import RegistrarMovimentacaoDTO
+from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
 
 from src.main.adapters.request_adapter import request_adapter
 
@@ -10,45 +7,43 @@ from src.main.composers.movimentacao.buscar_movimentacao_composer import buscar_
 from src.main.composers.movimentacao.registar_movimentacao_composer import registrar_movimentacao_composer
 from src.main.composers.movimentacao.listar_movimentacao_composer import listar_movimentacao_composer
 
-# from src.validators.movimentacao_validator import inserir_movimentacao_validator
-# from src.validators.general_validators import codigo_validator
+from src.main.adapters.dto.movimentacao_dto import InserirMovimentacaoDTO
 
 from src.errors.error_handle import handle_errors
 
-movimentacao_route_bp = Blueprint("movimentacao_routes", __name__)
+router = APIRouter(prefix="/movimentacao", tags=["Movimentacao"])
 
 
-@movimentacao_route_bp.route("/movimentacao/list", methods=["GET"])
-def listar_movimentacoes():
+@router.get("/list")
+async def listar_movimentacoes(request: Request):
     http_response = None
     
     try:
-        http_response = request_adapter(request, listar_movimentacao_composer())
+        http_response = await request_adapter(request, listar_movimentacao_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
-@movimentacao_route_bp.route("/movimentacao", methods=["POST"])
-def registrar_movimentacao():
+@router.post("")
+async def registrar_movimentacao(request: Request, body: InserirMovimentacaoDTO):
     http_response = None
     
     try:
-        inserir_movimentacao_validator(request.get_json())
-        http_response = request_adapter(request, registrar_movimentacao_composer())
+        http_response = await request_adapter(request, registrar_movimentacao_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
-@movimentacao_route_bp.route("/movimentacao/find/<string:codigo>", methods=["GET"])
-def buscar_movimentacao(codigo):
+@router.get("/find/{codigo_dispositivo}")
+async def buscar_movimentacao(request: Request, codigo_dispositivo: str):
     http_response = None
     
     try:
-        codigo_validator(codigo)
-        http_response = request_adapter(request, buscar_movimentacao_composer())
+        request.scope["path_params"] = {"codigo_dispositivo": codigo_dispositivo}
+        http_response = await request_adapter(request, buscar_movimentacao_composer())
     except Exception as exception:
         http_response = handle_errors(exception)
     
-    return json.dumps(http_response.body), http_response.status_code
+    return JSONResponse(content=http_response.body, status_code=http_response.status_code)

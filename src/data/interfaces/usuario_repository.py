@@ -3,5 +3,9 @@ from abc import ABC, abstractmethod
 class UsuarioRepositoryInterface(ABC):
 
     @abstractmethod
-    def login_usuario(self, re: str, senha: str):
+    def criar_usuario(self, re: str, nome: str, senha: str):
         pass
+
+    #@abstractmethod
+    #def login_usuario(self, re: str, senha: str):
+    #    pass

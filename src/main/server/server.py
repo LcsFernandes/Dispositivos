@@ -3,14 +3,16 @@ from starlette.responses import Response
 from src.main.routes import dispositivo_routes
 from src.main.routes import movimentacao_routes
 from src.main.routes import vaga_routes
+from src.main.routes import usuario_routes
 from src.infra.logger.logger import get_logger
 import time
 
 app = FastAPI()
 
 app.include_router(dispositivo_routes.router)
-#app.include_router(movimentacao_routes.router)
-#app.include_router(vaga_routes.router)
+app.include_router(movimentacao_routes.router)
+app.include_router(vaga_routes.router)
+app.include_router(usuario_routes.router)
 
 
 logger = get_logger()

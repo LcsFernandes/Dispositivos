@@ -17,9 +17,9 @@ class VagaRepositoryInterface(ABC):
         pass
     
     @abstractmethod
-    def inserir_vaga(self, deposito_id: int, identificacao: str) -> None:
+    def inserir_vaga(self, identificacao: str) -> None:
         pass
 
     @abstractmethod
-    def atualizar_vaga(self, id: int, deposito_id: int, identificacao: str) -> None:
+    def atualizar_vaga(self, id: int, identificacao: str) -> None:
         pass

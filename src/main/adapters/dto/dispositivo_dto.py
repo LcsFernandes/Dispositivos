@@ -8,16 +8,18 @@ class InserirDispositivoDTO(BaseModel):
     descricao: str
     status: int
     data_fabricacao: date
-    cliente: Optional[str] = None  
+    cliente: Optional[str] = None
+
+    class Config:
+        extra = "forbid"
 
 class AlterarDispositivoDTO(BaseModel):
-    id: int
     codigo: Optional[str] = None
     tipo: Optional[int] = None
     descricao: Optional[str] = None
     status: Optional[int] = None
     data_fabricacao: Optional[date] = None
-    cliente: Optional[str] = None 
-
-class VerificarCodigoDispositivoDTO(BaseModel):
-    codigo: str
+    cliente: Optional[str] = None
+    
+    class Config:
+        extra = "forbid"

@@ -24,7 +24,6 @@ class ListarVaga(ListarVagasInterface):
         for vaga in vagas:
             lista_vagas.append({
                     "id": vaga.id,
-                    "deposito_id": vaga.deposito_id,
                     "identificacao": vaga.identificacao
                     
                 })
