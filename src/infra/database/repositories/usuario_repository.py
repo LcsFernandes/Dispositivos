@@ -14,3 +14,19 @@ class UsuarioRepository(UsuarioRepositoryInterface):
                 database_connection.execute(query, params)
             except Exception as exception:
                 raise exception
+            
+    
+    def get_usuario(self, re: str):
+        with DatabaseConnection() as database_connection:
+            query = """ 
+                SELECT id, re, nome
+                FROM dw_usuario
+                WHERE re = ?
+                """
+            params = (re,)
+            try:
+                database_connection.execute(query, params)
+                result = database_connection.fetchone()
+                return result
+            except Exception as exception:
+                raise exception

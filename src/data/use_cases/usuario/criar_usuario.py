@@ -13,12 +13,29 @@ class CriarUsuario(CriarUsuarioInterface):
     def criar_usuario(self, dto: CriarUsuarioDTO):
         self.__valida_nome(dto.nome)
         self.__valida_re(dto.re)
+        self.__valida_se_usuario_existe(dto.re)
         self.__valida_senha(dto.senha)
         senha_hash = self.hash_senha(dto.senha)
 
         self.__usuario_repository.criar_usuario(dto.re, dto.nome, senha_hash)
 
 
+    @staticmethod
+    def __valida_nome(nome: str):
+        if not isinstance(nome, str) or len(nome.strip()) < 3:
+            raise HttpBadRequestError("Nome deve ser uma string valida")
+
+    @staticmethod
+    def __valida_re(re: int):
+        if not isinstance(re, int) or len(str(re)) > 6:
+            raise HttpBadRequestError("RE deve ser um inteiro valido com ate 6 caracteres.")
+        
+    def __valida_se_usuario_existe(self, re: str):
+        usuario = self.__usuario_repository.get_usuario(re)
+
+        if usuario:
+            raise HttpBadRequestError(f"Usuario {usuario.re} ja esta cadastrado.")
+    
     @staticmethod
     def __valida_senha(senha: str):
         if not isinstance(senha, str) or len(senha.strip()) < 6:
@@ -29,13 +46,7 @@ class CriarUsuario(CriarUsuarioInterface):
         return self.__senha_service.hash_senha(senha)
          
 
-    @staticmethod
-    def __valida_re(re: str):
-        if not isinstance(re, str) or len(re.strip()) != 6:
-            raise HttpBadRequestError("RE deve ser uma string valida com 6 caracteres.")
     
-    @staticmethod
-    def __valida_nome(nome: str):
-        if not isinstance(nome, str) or len(nome.strip()) < 3:
-            raise HttpBadRequestError("Nome deve ser uma string valida")
+    
+    
         

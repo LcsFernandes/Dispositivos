@@ -2,8 +2,9 @@ from src.presentation.interfaces.controller_interface import ControllerInterface
 from src.presentation.http_types.http_request import HttpRequest
 from src.presentation.http_types.http_response import HttpResponse
 from src.domain.use_cases.usuario.criar_usuario import CriarUsuario as CriarUsuarioInterface
+from src.domain.use_cases.usuario.buscar_usuario import BuscarUsuario as BuscarUsuarioInterface
 from src.data.dto.usuario.criar_usuario_dto import CriarUsuarioDTO
-from src.data.dto.movimentacao.registrar_movimentacao_dto import RegistrarMovimentacaoDTO
+from src.data.dto.usuario.buscar_usuario_dto import BuscarUsuarioDTO
 
 
 class CriarUsarioController(ControllerInterface):
@@ -21,3 +22,21 @@ class CriarUsarioController(ControllerInterface):
         response = self.__use_case.criar_usuario(dto)
 
         return HttpResponse(status_code=201, body=response)
+    
+class BuscarUsarioController(ControllerInterface):
+
+    def __init__(self, use_case: BuscarUsuarioInterface):
+        self.__use_case = use_case
+
+    def handle(self, http_request: HttpRequest) -> HttpResponse:
+        re = http_request.path_params["re"]
+
+        dto = BuscarUsuarioDTO(re=re)
+
+        response = self.__use_case.buscar_usuario(dto)
+
+        if not response:
+            return HttpResponse(status_code=204, body=None)
+
+
+        return HttpResponse(status_code=200, body=response)

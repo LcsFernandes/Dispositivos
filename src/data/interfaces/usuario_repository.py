@@ -6,6 +6,10 @@ class UsuarioRepositoryInterface(ABC):
     def criar_usuario(self, re: str, nome: str, senha: str):
         pass
 
+    @abstractmethod
+    def get_usuario(self, re: str):
+        pass
+
     #@abstractmethod
     #def login_usuario(self, re: str, senha: str):
     #    pass
