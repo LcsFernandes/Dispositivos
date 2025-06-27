@@ -2,3 +2,5 @@ from .http_bad_request import HttpBadRequestError
 from .http_not_found import HttpNotFoundError
 from .http_unprocessable_entity import HttpUnprocessableEntityError
 from .http_forbidden import HttpForbiddenError
+from .configuracao_error import ConfigurationError
+from .http_unauthorized import HttpUnauthorizedError

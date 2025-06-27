@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
-class CriarUsuarioDTO:
-    re: str
+class LoginUsuarioDTO:
+    re: int
     senha: str

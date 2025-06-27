@@ -27,7 +27,7 @@ class ListarMovimentacao(ListarMovimentacaoInterface):
                     "local_origem": movimentacao.local_origem,
                     "local_destino": movimentacao.local_destino,
                     "data_movimentacao": movimentacao.data_movimentacao.strftime('%Y-%m-%d %H:%M:%S'),
-                    "login_id": movimentacao.login_id
+                    "user_id": movimentacao.user_id
                 })
              
         return {

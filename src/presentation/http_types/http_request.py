@@ -7,7 +7,8 @@ class HttpRequest:
             query_params = None,
             path_params = None,
             url = None,
-            ipv4 = None
+            ipv4 = None,
+            id_user = None
     ) -> None:
         self.headers = headers
         self.body = body
@@ -15,3 +16,4 @@ class HttpRequest:
         self.path_params = path_params
         self.url = url
         self.ipv4 = ipv4
+        self.id_user = id_user

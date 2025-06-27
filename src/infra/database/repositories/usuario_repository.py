@@ -19,7 +19,7 @@ class UsuarioRepository(UsuarioRepositoryInterface):
     def get_usuario(self, re: str):
         with DatabaseConnection() as database_connection:
             query = """ 
-                SELECT id, re, nome
+                SELECT id, re, nome, senha
                 FROM dw_usuario
                 WHERE re = ?
                 """

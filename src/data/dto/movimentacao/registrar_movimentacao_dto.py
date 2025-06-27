@@ -5,4 +5,4 @@ class RegistrarMovimentacaoDTO:
     codigo: str
     local_origem: str
     local_destino: str
-    login_id: int
+    user_id: int

@@ -9,7 +9,3 @@ class UsuarioRepositoryInterface(ABC):
     @abstractmethod
     def get_usuario(self, re: str):
         pass
-
-    #@abstractmethod
-    #def login_usuario(self, re: str, senha: str):
-    #    pass

@@ -42,9 +42,9 @@ class RegistrarMovimentacaoController(ControllerInterface):
         codigo = http_request.body["codigo"]
         local_origem = http_request.body["local_origem"]
         local_destino = http_request.body["local_destino"]
-        login_id = http_request.body["login_id"]
+        user_id = http_request.id_user
 
-        dto = RegistrarMovimentacaoDTO(codigo=codigo, local_origem=local_origem, local_destino=local_destino, login_id=login_id)
+        dto = RegistrarMovimentacaoDTO(codigo=codigo, local_origem=local_origem, local_destino=local_destino, user_id=user_id)
         
         response = self.__use_case.registrar_movimentacao(dto)
 

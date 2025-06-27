@@ -34,7 +34,7 @@ class CriarUsuario(CriarUsuarioInterface):
         usuario = self.__usuario_repository.get_usuario(re)
 
         if usuario:
-            raise HttpBadRequestError(f"Usuario {usuario.re} ja esta cadastrado.")
+            raise HttpBadRequestError(f"Usuario {re} ja esta cadastrado.")
     
     @staticmethod
     def __valida_senha(senha: str):

@@ -4,6 +4,7 @@ from src.errors.types import HttpBadRequestError
 from src.data.dto.usuario.buscar_usuario_dto import BuscarUsuarioDTO
 from typing import Dict
 
+
 class BuscarUsuario(BuscarUsuarioInterface):
     def __init__(self, usuario_repository: UsuarioRepositoryInterface):
         self.__usuario_repository = usuario_repository
@@ -16,6 +17,7 @@ class BuscarUsuario(BuscarUsuarioInterface):
         if usuario:
             return self.__formatar_resposta(usuario.id, usuario.re, usuario.nome)
         
+        return None
 
     @staticmethod
     def __valida_re(re: int):
