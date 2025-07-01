@@ -32,7 +32,7 @@ class VerificarStatusDispositivo(VerificarStatusDispositivoInterface):
     @staticmethod
     def __formatar_resposta(codigo: str, status: bool) -> Dict:
         return {
-            "type": "Dispositivo",
+            "type": "Dispositivos",
             "data": {
                     "codigo": codigo,
                     "status": status

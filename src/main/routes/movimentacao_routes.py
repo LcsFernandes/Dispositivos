@@ -23,6 +23,7 @@ async def listar_movimentacoes(request: Request):
     except Exception as exception:
         http_response = handle_errors(exception)
     
+    
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 @router.post("")
@@ -36,7 +37,7 @@ async def registrar_movimentacao(request: Request, body: InserirMovimentacaoDTO)
     
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
-@router.get("/find/{codigo_dispositivo}")
+@router.get("/find/{codigo_dispositivo}", summary="Buscar o Historico de Movimentacao de um Dispositivo Especifico")
 async def buscar_movimentacao(request: Request, codigo_dispositivo: str):
     http_response = None
     

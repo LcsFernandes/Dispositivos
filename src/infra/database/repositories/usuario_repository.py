@@ -30,3 +30,16 @@ class UsuarioRepository(UsuarioRepositoryInterface):
                 return result
             except Exception as exception:
                 raise exception
+            
+    def alterar_senha_usuario(self, re: str, senha: str):
+        with DatabaseConnection() as database_connection:
+            query = """ 
+                UPDATE dw_usuario
+                SET senha = ?
+                WHERE re = ?
+                """
+            params = (senha, re,)
+            try:
+                database_connection.execute(query, params)
+            except Exception as exception:
+                raise exception

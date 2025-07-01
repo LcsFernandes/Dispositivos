@@ -13,7 +13,7 @@ app = FastAPI()
 
 auth_middleware = AuthMiddleware(
     token_service=TokenService(),
-    exclude_routes=["/usuario/login"]
+    exclude_routes=["/usuario/login", "/docs", "/openapi.json", "/usuario"]
 )
 
 @app.middleware("http")
@@ -32,14 +32,12 @@ logger = get_logger()
 async def log_requests(request: Request, call_next):
     start_time = time.time()
     params = {}
-    
-    # Verificar o Content-Type primeiro
+
     content_type = request.headers.get("content-type", "")
     params["content_type"] = content_type
     
     try:
         if "application/json" in content_type:
-            # Tentar ler o JSON apenas se for do tipo correto
             params["json"] = await request.json()
         else:
             params["json"] = None
@@ -55,7 +53,7 @@ async def log_requests(request: Request, call_next):
     response: Response = await call_next(request)
     process_time = time.time() - start_time
     
-    # Log adicional para debugging
+    
     logger.debug(f"Content-Type: {content_type}")
     if params["json"] is None and "application/json" in content_type:
         logger.warning("JSON não pôde ser decodificado")

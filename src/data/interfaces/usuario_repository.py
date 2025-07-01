@@ -9,3 +9,8 @@ class UsuarioRepositoryInterface(ABC):
     @abstractmethod
     def get_usuario(self, re: str):
         pass
+
+    @abstractmethod
+    def alterar_senha_usuario(self, re: str, senha: str):
+        pass
+

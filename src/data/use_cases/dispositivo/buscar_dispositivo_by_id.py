@@ -32,7 +32,7 @@ class BuscarDispositivoById(BuscarDispositivosByIdInterface):
     @staticmethod
     def __formatar_resposta(dispositivo: Dispositivo) -> Dict:
         return {
-            "type": "Dispositivo",
+            "type": "Dispositivos",
             "data": {
                     "id": dispositivo.id,
                     "codigo": dispositivo.codigo,

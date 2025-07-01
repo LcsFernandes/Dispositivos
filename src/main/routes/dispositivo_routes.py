@@ -12,13 +12,16 @@ from src.main.composers.dispositivo.listar_dispositivo_composer import listar_di
 from src.main.composers.dispositivo.verificar_status_dispositivo_composer import verificar_status_dispositivo_composer
 from src.main.composers.dispositivo.buscar_posicao_dispositivo_composer import buscar_posicao_dispositivo_composer
 
-from src.main.adapters.dto.dispositivo_dto import InserirDispositivoDTO, AlterarDispositivoDTO
+
+from src.main.adapters.dto.dispositivo_dto import InserirDispositivoDTO, AlterarDispositivoDTO, DispositivoOutputDTO, VerificarStatusDispositivoOutput
 
 from src.errors.error_handle import handle_errors
 
+from typing import List
+
 router = APIRouter(prefix="/dispositivo", tags=["Dispostivo"])
 
-@router.get("/list")
+@router.get("/list", response_model = DispositivoOutputDTO)
 async def listar_dispositivos(request: Request):
     http_response = None
     
@@ -68,7 +71,7 @@ async def excluir_dispositivo(request: Request, codigo_dispositivo: str):
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@router.get("/find_by_id/{id_dispositivo}")
+@router.get("/find_by_id/{id_dispositivo}", response_model = DispositivoOutputDTO)
 async def buscar_dispositivo_by_id(id_dispositivo: int, request: Request):
     http_response = None
     
@@ -81,7 +84,7 @@ async def buscar_dispositivo_by_id(id_dispositivo: int, request: Request):
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 
-@router.get("/find_by_codigo/{codigo_dispositivo}")
+@router.get("/find_by_codigo/{codigo_dispositivo}", response_model = DispositivoOutputDTO)
 async def buscar_dispositivo_by_codigo(codigo_dispositivo: str, request: Request):
     http_response = None
     
@@ -95,7 +98,7 @@ async def buscar_dispositivo_by_codigo(codigo_dispositivo: str, request: Request
 
 
 
-@router.get("/verificar_status")
+@router.get("/verificar_status", response_model = VerificarStatusDispositivoOutput)
 async def verificar_status_dispositivo(request: Request, codigo_dispositivo: str):
     http_response = None
     

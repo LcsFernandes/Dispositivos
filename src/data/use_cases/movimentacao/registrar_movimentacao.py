@@ -5,6 +5,8 @@ from src.domain.use_cases.movimentacao.registrar_movimentacao import RegistrarMo
 from src.data.dto.movimentacao.registrar_movimentacao_dto import RegistrarMovimentacaoDTO
 from src.errors.types import HttpBadRequestError
 from datetime import datetime
+from src.infra.logger.logger import get_logger
+
 
 class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
 
@@ -15,15 +17,16 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
 
 
     def registrar_movimentacao(self, dto: RegistrarMovimentacaoDTO):
+        log = get_logger()
         id_dispositivo = self.__valida_dispositivo(dto.codigo)
         id_vaga_origem = self.__valida_local_origem(dto.local_origem)
         self.__valida_posicao(dto.codigo, dto.local_origem)
         id_vaga_destino = self.__valida_local_destino(dto.local_destino)
-        self.__valida_usuario(dto.login_id)
-
+        self.__valida_usuario(dto.user_id)
+        log.info(f"id_dispositivo: {id_dispositivo}, id_vaga_origem: {id_vaga_origem}, id_vaga_destino:  {id_vaga_destino}, user_id: {dto.user_id}")
         data_movimentacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        self.__movimentacao_repository.registrar_movimentacao(id_dispositivo, id_vaga_origem, id_vaga_destino, data_movimentacao, dto.login_id)      
+        self.__movimentacao_repository.registrar_movimentacao(id_dispositivo, id_vaga_origem, id_vaga_destino, data_movimentacao, dto.user_id)      
     
     
     def __valida_dispositivo(self, codigo: str):
@@ -56,6 +59,9 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
 
         posicao = self.__dispositivo_repository.buscar_posicao_dispositivo(codigo)
         
+        if not posicao:
+            return True
+        
         if posicao[1] != local_origem:
             raise HttpBadRequestError("Dispositivo nao encontrado na vaga de origem. Nao e possivel realizar a movimentacao.")
 
@@ -73,4 +79,4 @@ class RegistrarMovimentacao(RegistrarMovimentacaoInterface):
     @staticmethod
     def __valida_usuario(login_id: int):
         if not isinstance(login_id, int) or login_id <= 0:
-            raise HttpBadRequestError("login_id e um campo inteiro positivo obrigatorio")
+            raise HttpBadRequestError("user_id e um campo inteiro positivo obrigatorio")

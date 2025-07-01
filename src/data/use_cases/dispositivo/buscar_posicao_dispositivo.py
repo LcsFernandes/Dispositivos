@@ -33,7 +33,7 @@ class BuscarPosicaoDispositivo(BuscarPosicaoDispositivoInterface):
     @staticmethod
     def __formatar_resposta(dispositivo: str, vaga: str) -> Dict:
         return {
-            "type": "Dispositivo",
+            "type": "Dispositivos",
             "data": {
                 "dispositivo": dispositivo,
                 "vaga": vaga

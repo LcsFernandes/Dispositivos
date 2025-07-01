@@ -126,21 +126,24 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     
     
     def buscar_posicao_dispositivo(self, codigo: str):
+        from src.infra.logger.logger import get_logger
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT TOP(1) dispositivo.codigo AS dispositivo, vaga.identificacao AS vaga
                 FROM dw_movimentacao_dispositivo movimentacao
                 INNER JOIN dw_dispositivos dispositivo
                     ON movimentacao.id_dispositivo = dispositivo.id
-                INNER JOIN dw_vaga vaga
+                INNER JOIN dw_vaga_dispositivo vaga
                     ON movimentacao.local_destino = vaga.id
                 WHERE dispositivo.codigo = ?
                 ORDER BY movimentacao.data_movimentacao DESC
                 """
             params = (codigo,)
             try:
+                log = get_logger()
                 database_connection.execute(query, params)
                 result = database_connection.fetchone()
+                log.info(f"resposta do banco de busca de posiscao: {result}")
                 return result
             except Exception as exception:
                 raise exception

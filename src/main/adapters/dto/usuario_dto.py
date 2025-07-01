@@ -14,3 +14,11 @@ class LoginUsuarioDTO(BaseModel):
 
     class Config:
         extra = "forbid"
+
+class AlterarSenhaUsuarioDTO(BaseModel):
+    re: int
+    senha_atual: str
+    senha: str
+
+    class Config:
+        extra = "forbid"
