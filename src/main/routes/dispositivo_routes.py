@@ -22,14 +22,14 @@ from typing import List
 router = APIRouter(prefix="/dispositivo", tags=["Dispostivo"])
 
 @router.get("/list", response_model = DispositivoOutputDTO)
-async def listar_dispositivos(request: Request):
+async def listar_dispositivos(request: Request, page: int = 1, page_size: int = 10):
     http_response = None
     
     try:
         http_response = await request_adapter(request, listar_dispositivo_composer())
     except Exception as exception:
         http_response =  handle_errors(exception)
-    
+      
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 

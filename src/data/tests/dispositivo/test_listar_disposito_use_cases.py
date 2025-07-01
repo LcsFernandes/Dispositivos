@@ -1,6 +1,6 @@
 import pytest
 import logging
-from src.data.use_cases.dispositivo.listar_dispositivos import ListarDispositivo
+from src.data.use_cases.dispositivo.listar_dispositivo import ListarDispositivo
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

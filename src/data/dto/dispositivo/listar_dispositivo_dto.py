@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
-class BuscarMovimentacaoDTO:
-    codigo: str
+class ListarDispositivoDTO:
     page: int
     page_size: int

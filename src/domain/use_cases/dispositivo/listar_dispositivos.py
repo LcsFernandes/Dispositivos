@@ -5,5 +5,5 @@ from typing import List
 class ListarDispositivos:
 
     @abstractmethod
-    def listar_dispositivos(self) -> List[Dispositivo]:
+    def listar_dispositivos(self, page: int, page_size: int) -> List[Dispositivo]:
         pass

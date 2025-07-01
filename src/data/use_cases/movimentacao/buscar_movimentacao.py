@@ -14,19 +14,44 @@ class BuscarMovimentacao(BuscarMovimentacaoInterface):
 
     def buscar_movimentacao(self, dto: BuscarMovimentacaoDTO):
         self.__valida_codigo(dto.codigo)
-
+        self.__validar_page(dto.page)
+        self.__validar_page_size(dto.page_size)
+        
         dispositivo = self.__dispositivo_repository.get_dispositivo_by_codigo(dto.codigo)
 
         if not dispositivo:
             raise HttpBadRequestError("Dispositivo nao encontrado")
+        
 
-        movimentacao = self.__movimentacao_repository.get_movimentacao_por_dispositivo(dto.codigo)
+        page, page_size = self.__calcular_paginacao(dto.page, dto.page_size)
+
+        movimentacao = self.__movimentacao_repository.get_movimentacao_por_dispositivo(dto.codigo, page, page_size)
 
         if movimentacao:
             response = self.__formatar_resposta(movimentacao)
             return response
         
         return None
+    
+    def __calcular_paginacao(self, page: int, page_size: int):
+    
+        if page == 1:
+            page = 0
+        else:
+            page = page - 1
+            page = (page * page_size)
+
+        return page, page_size
+
+    @staticmethod
+    def __validar_page(page: int):
+        if not isinstance(page, int) or page <= 0:
+            raise HttpBadRequestError("page deve ser um numero inteiro positivo")
+    
+    @staticmethod
+    def __validar_page_size(page_size: int):
+        if not isinstance(page_size, int) or page_size <= 0:
+            raise HttpBadRequestError("page_size deve ser um numero inteiro positivo")
 
     @staticmethod
     def __valida_codigo(codigo: str) -> None:
@@ -43,11 +68,11 @@ class BuscarMovimentacao(BuscarMovimentacaoInterface):
         for movimentacao in movimentacoes:
             lista_movimentacoes.append({
                     "id": movimentacao.id,
-                    "codigo": movimentacao.codigo,
+                    "codigo_dispositivo": movimentacao.codigo,
                     "local_origem": movimentacao.local_origem,
                     "local_destino": movimentacao.local_destino,
                     "data_movimentacao": movimentacao.data_movimentacao.strftime('%Y-%m-%d %H:%M:%S'),
-                    "user_id": movimentacao.user_id
+                    "re_usuario": movimentacao.usuario
                 })
              
         return {

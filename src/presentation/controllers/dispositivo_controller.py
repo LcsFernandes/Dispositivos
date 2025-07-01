@@ -14,6 +14,9 @@ from src.data.dto.dispositivo.buscar_dispositivo_dto import BuscarDispositivoDTO
 from src.data.dto.dispositivo.excluir_dispositivo_dto import ExcluirDispositivoDTO
 from src.data.dto.dispositivo.inserir_dipositivo_dto import InserirDispositivoDTO
 from src.data.dto.dispositivo.verificar_status_dispositivos_dto import VerificarStatusDispositivoDTO 
+from src.data.dto.dispositivo.listar_dispositivo_dto import ListarDispositivoDTO
+
+from src.infra.logger.logger import get_logger
 
 
 class AlterarDispositivoController(ControllerInterface):
@@ -103,8 +106,16 @@ class ListarDispositivoController(ControllerInterface):
         self.__use_case = use_case
 
     def handle(self, http_request: HttpRequest)-> HttpResponse:
+        page = int(http_request.query_params.get("page", 1))
+        page_size = int(http_request.query_params.get("page_size", 10))
+
+        dto = ListarDispositivoDTO(page=page, page_size=page_size)
         
-        response = self.__use_case.listar_dispositivos()
+        response = self.__use_case.listar_dispositivos(dto)
+
+        if not response:
+            return HttpResponse(status_code=204, body=response)
+
  
         return HttpResponse(status_code=200, body=response)
     

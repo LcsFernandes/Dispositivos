@@ -49,15 +49,18 @@ class DispositivoRepository(DispositivoRepositoryInterface):
             except Exception as exception:
                 raise exception
             
-    def get_all_dispositivos(self) -> List[Dispositivo]:
+    def get_all_dispositivos(self, page: int, page_size: int) -> List[Dispositivo]:
         with DatabaseConnection() as database_connection:
-            query = """ 
+            query = f""" 
                 SELECT dispositivos.id, dispositivos.codigo, tipo_dispositivo.nome AS tipo , dispositivos.descricao, status_dispositivo.nome AS status, dispositivos.data_fabricacao, dispositivos.cliente
                 FROM dw_dispositivos dispositivos
                 INNER JOIN dw_status_dispositivo status_dispositivo
                     ON dispositivos.status = status_dispositivo.id
                 INNER JOIN dw_tipo_dispositivo tipo_dispositivo
                     ON dispositivos.tipo = tipo_dispositivo.id
+                ORDER BY dispositivos.id
+                OFFSET {page} ROWS
+                FETCH NEXT {page_size} ROWS ONLY;
                 """
             try:
                 database_connection.execute(query)
@@ -126,7 +129,6 @@ class DispositivoRepository(DispositivoRepositoryInterface):
     
     
     def buscar_posicao_dispositivo(self, codigo: str):
-        from src.infra.logger.logger import get_logger
         with DatabaseConnection() as database_connection:
             query = """ 
                 SELECT TOP(1) dispositivo.codigo AS dispositivo, vaga.identificacao AS vaga
@@ -140,10 +142,9 @@ class DispositivoRepository(DispositivoRepositoryInterface):
                 """
             params = (codigo,)
             try:
-                log = get_logger()
+                
                 database_connection.execute(query, params)
                 result = database_connection.fetchone()
-                log.info(f"resposta do banco de busca de posiscao: {result}")
                 return result
             except Exception as exception:
                 raise exception

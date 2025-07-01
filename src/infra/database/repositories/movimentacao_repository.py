@@ -7,19 +7,30 @@ from datetime import datetime
 class MovimentacaoRepository(MovimentacaoRepositoryInterface):
 
     
-    def get_movimentacao_por_dispositivo(self, codigo: str) -> List[Movimentacao]:
+    def get_movimentacao_por_dispositivo(self, codigo: str, page: int, page_size: int) -> List[Movimentacao]:
         with DatabaseConnection() as database_connection:
-            query = """ 
-                SELECT TOP(50) movimentacao_dispositivo.id, dispositivo.codigo, vaga.identificacao AS local_origem, vaga2.identificacao AS local_destino, movimentacao_dispositivo.data_movimentacao, movimentacao_dispositivo.user_id
-                FROM dw_movimentacao_dispositivo movimentacao_dispositivo
-                INNER JOIN dw_vaga vaga
-                ON movimentacao_dispositivo.local_origem = vaga.id
-                INNER JOIN dw_vaga vaga2
-                ON movimentacao_dispositivo.local_destino = vaga2.id
+            query = f""" 
+                SELECT 
+                    movimentacao_dispositivo.id, 
+                    dispositivo.codigo, 
+                    vaga.identificacao AS local_origem, 
+                    vaga2.identificacao AS local_destino, 
+                    movimentacao_dispositivo.data_movimentacao, 
+                    usuario.re as usuario
+                FROM 
+                    dw_movimentacao_dispositivo movimentacao_dispositivo
+                INNER JOIN dw_vaga_dispositivo vaga
+                    ON movimentacao_dispositivo.local_origem = vaga.id
+                INNER JOIN dw_vaga_dispositivo vaga2
+                    ON movimentacao_dispositivo.local_destino = vaga2.id
                 INNER JOIN dw_dispositivos dispositivo
-                ON movimentacao_dispositivo.id_dispositivo = dispositivo.id
+                    ON movimentacao_dispositivo.id_dispositivo = dispositivo.id
+                INNER JOIN dw_usuario usuario
+                    ON  movimentacao_dispositivo.user_id = usuario.id
                 WHERE dispositivo.codigo = ?
-                ORDER BY movimentacao_dispositivo.data_movimentacao DESC;
+                ORDER BY movimentacao_dispositivo.data_movimentacao DESC
+                OFFSET {page} ROWS
+                FETCH NEXT {page_size} ROWS ONLY;
                 """
             params = (codigo,)
             try:
@@ -31,11 +42,29 @@ class MovimentacaoRepository(MovimentacaoRepositoryInterface):
                 raise exception
 
     
-    def get_all_movimentacoes(self) -> List[Movimentacao]:
+    def get_all_movimentacoes(self, page: int, page_size: int) -> List[Movimentacao]:
         with DatabaseConnection() as database_connection:
-            query = """ 
-                SELECT id, id_dispositivo, local_origem, local_destino, data_movimentacao, user_id
-                FROM dw_movimentacao_dispositivo;
+            query = f""" 
+                SELECT 
+                    movimentacao_dispositivo.id, 
+                    dispositivo.codigo, 
+                    vaga.identificacao AS local_origem, 
+                    vaga2.identificacao AS local_destino, 
+                    movimentacao_dispositivo.data_movimentacao, 
+                    usuario.re as usuario
+                FROM 
+                    dw_movimentacao_dispositivo movimentacao_dispositivo
+                INNER JOIN dw_vaga_dispositivo vaga
+                    ON movimentacao_dispositivo.local_origem = vaga.id
+                INNER JOIN dw_vaga_dispositivo vaga2
+                    ON movimentacao_dispositivo.local_destino = vaga2.id
+                INNER JOIN dw_dispositivos dispositivo
+                    ON movimentacao_dispositivo.id_dispositivo = dispositivo.id
+                INNER JOIN dw_usuario usuario
+                    ON  movimentacao_dispositivo.user_id = usuario.id
+                ORDER BY movimentacao_dispositivo.id
+                OFFSET {page} ROWS
+                FETCH NEXT {page_size} ROWS ONLY;
                 """
             try:
                 database_connection.execute(query)

@@ -5,5 +5,5 @@ from typing import List
 
 class ListarMovimentacao(ABC):
     @abstractmethod
-    def listar_movimentacao(self) -> List[Movimentacao]:
+    def listar_movimentacao(self, page: int, page_size: int) -> List[Movimentacao]:
         pass

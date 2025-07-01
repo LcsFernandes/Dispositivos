@@ -14,7 +14,7 @@ class DispositivoRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def get_all_dispositivos(self) -> List[Dispositivo]:
+    def get_all_dispositivos(self, page: int, page_size: int) -> List[Dispositivo]:
         pass
 
     @abstractmethod
