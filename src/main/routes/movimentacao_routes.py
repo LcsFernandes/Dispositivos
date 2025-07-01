@@ -15,7 +15,7 @@ router = APIRouter(prefix="/movimentacao", tags=["Movimentacao"])
 
 
 @router.get("/list")
-async def listar_movimentacoes(request: Request, page: int = 1, page_size: int = 10):
+async def listar_movimentacoes(request: Request):
     http_response = None
     
     try:

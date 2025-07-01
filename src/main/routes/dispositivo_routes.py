@@ -22,7 +22,7 @@ from typing import List
 router = APIRouter(prefix="/dispositivo", tags=["Dispostivo"])
 
 @router.get("/list", response_model = DispositivoOutputDTO)
-async def listar_dispositivos(request: Request, page: int = 1, page_size: int = 10):
+async def listar_dispositivos(request: Request):
     http_response = None
     
     try:
