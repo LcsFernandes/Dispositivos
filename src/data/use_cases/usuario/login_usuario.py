@@ -27,7 +27,7 @@ class LoginUsuario(LoginUsuarioInterface):
             
             return response
     
-    def __valida_usuario(self, re: int, senha: str):
+    def __valida_usuario(self, re: str, senha: str):
         self.__valida_re(re)
         self.__valida_senha(senha)
 
@@ -42,8 +42,8 @@ class LoginUsuario(LoginUsuarioInterface):
         return usuario
 
     @staticmethod
-    def __valida_re(re: int):
-        if not isinstance(re, int) or len(str(re)) > 6:
+    def __valida_re(re: str):
+        if not isinstance(re, str) or len(re.strip()) != 6:
             raise HttpUnauthorizedError("Credencias Invalidas")
 
     @staticmethod

@@ -2,6 +2,6 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class AlterarSenhaUsuarioDTO:
-    re: int
+    re: str
     senha_atual: str
     senha: str

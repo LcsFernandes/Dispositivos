@@ -25,7 +25,7 @@ async def criar_usuario(request: Request, body: CriarUsuarioDTO):
     return JSONResponse(content=http_response.body, status_code=http_response.status_code)
 
 @router.get("/{re}")
-async def buscar_usuario(request: Request, re: int):
+async def buscar_usuario(request: Request, re: str):
     http_response = None
     
     try:

@@ -20,12 +20,12 @@ class BuscarUsuario(BuscarUsuarioInterface):
         return None
 
     @staticmethod
-    def __valida_re(re: int):
-        if not isinstance(re, int) or len(str(re)) > 6:
-            raise HttpBadRequestError("RE deve ser um inteiro valido com ate 6 caracteres.")
+    def __valida_re(re: str):
+        if not isinstance(re, str) or len(re.strip()) != 6:
+            raise HttpBadRequestError("RE deve ser um numero inteiro valido com 6 caracteres.")
     
     @staticmethod
-    def __formatar_resposta(id: int, re: int, nome: str) -> Dict:
+    def __formatar_resposta(id: int, re: str, nome: str) -> Dict:
         return {
             "type": "Usuario",
             "data": {

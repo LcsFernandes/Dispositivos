@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class CriarUsuarioDTO(BaseModel):
-    re: int
+    re: str
     nome: str
     senha: str
 
@@ -9,14 +9,14 @@ class CriarUsuarioDTO(BaseModel):
         extra = "forbid"
 
 class LoginUsuarioDTO(BaseModel):
-    re: int
+    re: str
     senha: str
 
     class Config:
         extra = "forbid"
 
 class AlterarSenhaUsuarioDTO(BaseModel):
-    re: int
+    re: str
     senha_atual: str
     senha: str
 

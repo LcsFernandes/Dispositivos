@@ -26,9 +26,9 @@ class CriarUsuario(CriarUsuarioInterface):
             raise HttpBadRequestError("Nome deve ser uma string valida")
 
     @staticmethod
-    def __valida_re(re: int):
-        if not isinstance(re, int) or len(str(re)) > 6:
-            raise HttpBadRequestError("RE deve ser um inteiro valido com ate 6 caracteres.")
+    def __valida_re(re: str):
+        if not isinstance(re, str) or len(re.strip()) != 6:
+            raise HttpBadRequestError("RE deve ser um numero inteiro valido com 6 caracteres.")
         
     def __valida_se_usuario_existe(self, re: str):
         usuario = self.__usuario_repository.get_usuario(re)

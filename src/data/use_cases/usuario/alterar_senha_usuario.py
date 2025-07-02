@@ -29,9 +29,9 @@ class AlterarSenhaUsuario(AlterarSenhaUsuarioInterface):
 
 
     @staticmethod
-    def __valida_re(re: int):
-        if not isinstance(re, int) or len(str(re)) > 6:
-            raise HttpBadRequestError("RE invalido")
+    def __valida_re(re: str):
+        if not isinstance(re, str) or len(re.strip()) != 6:
+            raise HttpBadRequestError("RE deve ser um numero inteiro valido com 6 caracteres.")
 
     @staticmethod
     def __valida_senha(senha: str):
