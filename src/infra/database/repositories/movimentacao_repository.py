@@ -62,7 +62,7 @@ class MovimentacaoRepository(MovimentacaoRepositoryInterface):
                     ON movimentacao_dispositivo.id_dispositivo = dispositivo.id
                 INNER JOIN dw_usuario usuario
                     ON  movimentacao_dispositivo.user_id = usuario.id
-                ORDER BY movimentacao_dispositivo.id
+                ORDER BY movimentacao_dispositivo.id DESC
                 OFFSET {page} ROWS
                 FETCH NEXT {page_size} ROWS ONLY;
                 """
