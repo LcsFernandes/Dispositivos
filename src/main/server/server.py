@@ -13,7 +13,7 @@ app = FastAPI()
 
 auth_middleware = AuthMiddleware(
     token_service=TokenService(),
-    exclude_routes=["/usuario/login", "/docs", "/openapi.json", "/usuario"]
+    exclude_routes=["/usuario/login", "/usuario", "/docs", "/openapi.json"]
 )
 
 @app.middleware("http")
@@ -30,6 +30,12 @@ logger = get_logger()
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
+
+    rotas_excluidas = ["/usuario", "/usuario/login"]
+
+    if any(request.url.path.startswith(rota) for rota in rotas_excluidas):
+        return await call_next(request)
+
     start_time = time.time()
     params = {}
 
